@@ -1,10 +1,14 @@
 const express = require('express');
 const prisma = require('./service/prisma');
 const cors = require('cors');
+const bcrypt = require('bcryptjs')
+const jwt = require("jsonwebtoken")
 
 const app = express();
 
 app.use(express.json());
+
+const JWT_SECRET = process.env.JWT_SECRET || 'fideliapp';
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -12,24 +16,44 @@ app.use(cors({
   allowedHeaders: ['Content-Type']
 }));
 
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) return res.status(401).json({ message: 'Você não está autenticado.' });
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: 'Token invalido' });
+    req.user = user;
+    next();
+  });
+};
+
 app.post("/login", async (req, res) => {
   try {
-    const { user, pass } = req.body;
+    const { cpf, pass } = req.body;
 
-    const userExists = await prisma.client.findUnique({
-      where: { email: user, senha: pass }
+    const cliente = await prisma.client.findUnique({
+      where: { CPF: cpf }
     });
 
-    if (userExists) {
-      res.json({ message: "Authorized" });
-    } else {
-      res.status(401).json({ message: "Unauthorized" });
-    }
+    if (!cliente) return res.status(401).send({ message: "Usuário ou senha inválidos" });
+
+    const validPassword = pass === cliente.senha
+    if (!validPassword) return res.status(401).send({ message: "Usuário ou senha inválidos" });
+
+    const token = jwt.sign({ id: cliente.id, cpf: cliente.CPF }, JWT_SECRET, { expiresIn: '24h' });
+
+    res.status(200).json({ message: "Autenticado com sucesso", token });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+app.use(authenticateToken)
 
 app.post('/register', async (req, res) => {
   try {
@@ -46,7 +70,6 @@ app.post('/register', async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -128,9 +151,11 @@ app.get("/cards/:id", async (req, res) => {
   }
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Internal Server Error" });
+
+  next()
 });
 
 const port = process.env.PORT || 3000;
