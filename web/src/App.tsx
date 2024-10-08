@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import './App.css'
 import Home from './pages/home';
 import Register from './pages/auth/register';
@@ -8,11 +8,17 @@ import Login from './pages/auth/login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const token = localStorage.getItem('authToken');
+  console.log(token)
+  if (!token) {
+    return <Navigate to="/auth/login" />;
+  }
+
+  return children;
+};
+
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-  },
   {
     path: '/auth/register',
     element: <Register />,
@@ -22,12 +28,28 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <Home />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: '/enterprise/create',
-    element: <CreateEnterprise />,
+    element: (
+      <ProtectedRoute>
+        <CreateEnterprise />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/card/create',
-    element: <CreateCard />,
+    element: (
+      <ProtectedRoute>
+        <CreateCard />
+      </ProtectedRoute>
+    ),
   },
 ]);
 
@@ -47,7 +69,7 @@ function App() {
         theme="light"
       />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
