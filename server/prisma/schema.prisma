@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id    Int    @id @default(autoincrement())
+  CPF   String @unique
+  tel   String
+  email String
+  senha String
+
+  Endereco Endereco[]
+  Cartao   Cartao[]
+  Compras  Compras[]
+}
+
+model Endereco {
+  id        Int    @id @default(autoincrement())
+  clienteId Int
+  rua       String
+  numero    Int
+  bairro    String
+  cidade    String
+  estado    String
+  cep       String
+  cliente   Client @relation(fields: [clienteId], references: [id])
+}
+
+model Cartao {
+  id        Int    @id @default(autoincrement())
+  clienteId Int
+  numero    String
+  nome      String
+  empresaId Int
+
+  empresa    Empresa      @relation(fields: [empresaId], references: [id])
+  cliente    Client       @relation(fields: [clienteId], references: [id])
+  Compras    Compras[]
+  Transacoes Transacoes[]
+}
+
+model Ramo {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  descricao String
+  Empresa   Empresa[]
+}
+
+model Empresa {
+  id          Int    @id @default(autoincrement())
+  nome        String
+  cnpj        String @unique
+  responsavel String
+  email       String
+  ramoId      Int
+
+  ramo       Ramo         @relation(fields: [ramoId], references: [id])
+  Cartao     Cartao[]
+  Promocoes  Promocoes[]
+  Transacoes Transacoes[]
+}
+
+model Compras {
+  id        Int      @id @default(autoincrement())
+  clienteId Int
+  cartaoId  Int
+  valor     Float
+  data      DateTime
+  notaId    Int
+
+  nota    NotaFiscal @relation(fields: [notaId], references: [id])
+  cliente Client     @relation(fields: [clienteId], references: [id])
+  cartao  Cartao     @relation(fields: [cartaoId], references: [id])
+}
+
+model NotaFiscal {
+  id       Int       @id @default(autoincrement())
+  compraId Int
+  valor    Float
+  data     DateTime
+  Compras  Compras[]
+}
+
+model Transacoes {
+  id        Int      @id @default(autoincrement())
+  valor     Float
+  data      DateTime
+  cartaoId  Int
+  empresaId Int
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+  cartao  Cartao  @relation(fields: [cartaoId], references: [id])
+}
+
+model Promocoes {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String
+  valor     Float
+  data      DateTime
+  empresaId Int
+
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+}
+
+model Beneficios {
+  id        Int    @id @default(autoincrement())
+  desconto  Float
+  descricao String
+}
