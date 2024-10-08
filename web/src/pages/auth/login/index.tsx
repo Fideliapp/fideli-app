@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
+import { useNavigate, Link } from 'react-router-dom';
 
 interface LoginFormInputs {
   cpf: string;
@@ -9,17 +10,16 @@ interface LoginFormInputs {
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       const res = await api.post("/login", data);
-
       const { token } = res.data;
 
       localStorage.setItem('authToken', token);
-
-      toast.success("Autenticado com sucesso")
-
+      toast.success("Autenticado com sucesso");
+      navigate('/');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       toast.error('Erro no login, por favor, tente novamente.');
@@ -67,6 +67,13 @@ const Login = () => {
               type="submit"
               className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
             />
+          </div>
+
+          <div className="text-center">
+            <span className="text-sm text-gray-600">Não tem uma conta? </span>
+            <Link to="/auth/register" className="text-indigo-600 hover:underline">
+              Crie sua conta
+            </Link>
           </div>
         </form>
       </div>
