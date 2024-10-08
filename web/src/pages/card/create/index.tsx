@@ -1,15 +1,34 @@
 import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
+import { toast } from 'react-toastify';
 
 const CreateCard = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async (data: any) => {
-    await api.post("/cards", {
-      ...data,
-      clienteId: 4,
-      empresaId: 1,
-    });
+    try {
+      const res = await api.post("/cards", {
+        ...data,
+        clienteId: 4,
+        empresaId: 1,
+      });
+
+      if (res.status >= 200 && res.status < 300) {
+        toast.success("Cadastro realizado com sucesso!");
+      } else {
+        toast.error(res.data.message || "Ops... algo deu errado.");
+      }
+    } catch (error: any) {
+      if (error.response) {
+        toast.error(
+          error.response.data.message || "Erro no servidor. Tente novamente."
+        );
+      } else if (error.request) {
+        toast.error("Não foi possível se conectar ao servidor. Verifique sua conexão.");
+      } else {
+        toast.error("Erro desconhecido. Tente novamente.");
+      }
+    }
   };
 
   return (

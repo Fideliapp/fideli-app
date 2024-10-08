@@ -1,7 +1,6 @@
 const express = require('express');
 const prisma = require('./service/prisma');
 const cors = require('cors');
-const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 
 const app = express();
@@ -13,7 +12,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'fideliapp';
 app.use(cors({
   origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 const authenticateToken = (req, res, next) => {
@@ -59,6 +58,10 @@ app.post('/register', async (req, res) => {
   try {
     const { pass, cpf, tel, email } = req.body;
 
+    const existsCpf = await prisma.client.findUnique({ where: { CPF: cpf } })
+
+    if (existsCpf) return res.status(400).json({ message: "CPF já está em uso." });
+
     await prisma.client.create({
       data: {
         email,
@@ -76,10 +79,16 @@ app.post('/register', async (req, res) => {
 
 app.post("/enterprise", async (req, res) => {
   try {
-    const { ...data } = req.body;
+    const { cnpj, ...data } = req.body;
+
+    const cnpjExists = await prisma.empresa.findUnique({ where: { cnpj } });
+
+    if (cnpjExists) {
+      return res.status(400).json({ message: "CNPJ já está em uso." });
+    }
 
     const newEnterprise = await prisma.empresa.create({
-      data
+      data: { cnpj, ...data }
     });
 
     res.status(201).json(newEnterprise);
