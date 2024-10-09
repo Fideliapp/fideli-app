@@ -117,6 +117,21 @@ app.get('/enterprise/:id', async (req, res) => {
   }
 });
 
+app.get('/enterprise', async (req, res) => {
+  try {
+    const enterprises = await prisma.empresa.findMany({
+      include: {
+        Promocoes: true,
+        ramo: true
+      }
+    });
+    res.status(200).json(enterprises);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+})
+
 app.post("/cards", async (req, res) => {
   try {
     const { ...data } = req.body;

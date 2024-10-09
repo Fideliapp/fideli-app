@@ -7,6 +7,7 @@ import CreateCard from './pages/card/create';
 import Login from './pages/auth/login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import GetEnterprise from './pages/enterprise/get';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem('authToken');
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <CreateEnterprise />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/enterprise',
+    element: (
+      <ProtectedRoute>
+        <GetEnterprise />
       </ProtectedRoute>
     ),
   },
