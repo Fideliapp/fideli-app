@@ -52,8 +52,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.use(authenticateToken)
-
 app.post('/register', async (req, res) => {
   try {
     const { pass, cpf, tel, email } = req.body;
@@ -76,6 +74,8 @@ app.post('/register', async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+app.use(authenticateToken)
 
 app.post("/enterprise", async (req, res) => {
   try {
