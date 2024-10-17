@@ -19,7 +19,7 @@ const Login = () => {
 
       localStorage.setItem('authToken', token);
       toast.success("Autenticado com sucesso");
-      navigate('/');
+      navigate('/enterprise');
     } catch (error) {
       console.error('Erro ao fazer login:', error);
       toast.error('Erro no login, por favor, tente novamente.');
