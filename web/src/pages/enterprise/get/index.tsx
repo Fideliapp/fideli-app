@@ -38,7 +38,7 @@ const GetEnterprise = () => {
         <button
           className="px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
         >
-          Nova nota fiscal
+          Nova compra
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
