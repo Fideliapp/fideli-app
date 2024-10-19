@@ -19,7 +19,7 @@ const Sidebar = () => {
     <div
       onMouseEnter={() => handleOpen(true)}
       onMouseLeave={() => handleOpen(false)}
-      className={`flex flex-col h-screen bg-zinc-800 text-white transition-width duration-300 ${isOpen ? "w-60" : "w-20"
+      className={`flex flex-col h-screen shadow-xl text-zinc-800 transition-width duration-300 ${isOpen ? "w-60" : "w-20"
         }`}
     >
       <div className="flex-grow">
@@ -27,7 +27,7 @@ const Sidebar = () => {
           <Link
             key={index}
             to={route.path}
-            className={`flex  py-4 hover:bg-indigo-600 hover:bg-opacity-50 cursor-pointer transition duration-150 ease-in-out
+            className={`flex  py-4 hover:bg-indigo-600 hover:bg-opacity-30 cursor-pointer transition duration-150 ease-in-out
               ${isOpen ? "justify-start p-2" : "justify-center"}`
             }
           >
