@@ -8,6 +8,7 @@ import Login from './pages/auth/login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import GetEnterprise from './pages/enterprise/get';
+import Sidebar from './components/sidebar';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem('authToken');
@@ -16,7 +17,12 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     return <Navigate to="/auth/login" />;
   }
 
-  return children;
+  return (
+    <div className="w-full h-full flex">
+      <Sidebar />
+      {children}
+    </div>
+  );
 };
 
 const router = createBrowserRouter([
