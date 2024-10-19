@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../../services/api";
 import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface Enterprise {
   id: number;
@@ -24,6 +25,7 @@ const RenderStars = (rating: number) => {
 
 const GetEnterprise = () => {
   const [enterprises, setEnterprises] = useState<Enterprise[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     api.get('/enterprise').then((response) => {
@@ -34,11 +36,12 @@ const GetEnterprise = () => {
   return (
     <div className="bg-gray-100 min-h-screen w-full p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">Lista de Empresas</h1>
+        <h1 className="text-2xl font-bold mb-4">Nova Empresa</h1>
         <button
           className="px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          onClick={() => navigate('/enterprise/create')}
         >
-          Nova compra
+          Nova empresa
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
