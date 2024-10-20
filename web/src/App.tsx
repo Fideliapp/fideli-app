@@ -1,14 +1,14 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import './App.css'
 import Home from './pages/home';
 import Register from './pages/auth/register';
 import CreateEnterprise from './pages/enterprise/create';
 import CreateCard from './pages/card/create';
 import Login from './pages/auth/login';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import GetEnterprise from './pages/enterprise/get';
 import Sidebar from './components/sidebar';
+import './App.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem('authToken');
