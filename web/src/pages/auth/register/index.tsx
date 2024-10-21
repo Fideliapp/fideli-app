@@ -1,9 +1,11 @@
 import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     try {
@@ -11,6 +13,7 @@ const Register = () => {
 
       if (res.status >= 200 && res.status < 300) {
         toast.success("Cadastro realizado com sucesso!");
+        navigate("/auth/login");
       } else {
         toast.error(res.data.message || "Ops... algo deu errado.");
       }

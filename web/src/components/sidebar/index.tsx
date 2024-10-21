@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaHome, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt } from "react-icons/fa"; // Importando o ícone de logout
+import { FaHome, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 
