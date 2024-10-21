@@ -11,6 +11,7 @@ import './App.css'
 import 'react-toastify/dist/ReactToastify.css';
 import GetCards from './pages/card/get';
 import { jwtDecode } from "jwt-decode";
+import { AuthProvider } from './context/AuthContext';
 
 const isTokenExpired = (token: string): boolean => {
   const { exp } = jwtDecode<{ exp: number }>(token);
@@ -85,7 +86,7 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
       <ToastContainer
         position="top-right"
@@ -98,7 +99,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
-    </>
+    </AuthProvider>
   );
 }
 
