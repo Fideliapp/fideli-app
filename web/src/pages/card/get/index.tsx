@@ -13,8 +13,8 @@ interface Cards {
 }
 
 const GetCards = () => {
-  const [cards, setCards] = useState<Cards[]>([]);
   const navigate = useNavigate();
+  const [cards, setCards] = useState<Cards[]>([]);
   const { userId } = useAuth();
 
   useEffect(() => {
