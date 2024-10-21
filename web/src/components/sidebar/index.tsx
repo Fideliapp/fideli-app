@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { FaHome, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaHome, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt } from "react-icons/fa"; // Importando o ícone de logout
+import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 
 const routes = [
@@ -10,6 +10,7 @@ const routes = [
 ];
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -18,13 +19,18 @@ const Sidebar = () => {
     <Link
       key={index}
       to={route.path}
-      className={`flex py-4 cursor-pointer transition-all duration-150 ease-in-out  transform
+      className={`flex py-4 cursor-pointer transition-all duration-150 ease-in-out transform
         ${isOpen ? "justify-start p-2" : "justify-center"}`}
     >
       {route.icon}
       {isOpen && <span className="pl-4">{route.name}</span>}
     </Link>
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/auth/login");
+  };
 
   return (
     <div className={`flex flex-col h-screen shadow-xl text-zinc-800 transition-width duration-300 ${isOpen ? "w-60" : "w-20"}`}>
@@ -37,6 +43,14 @@ const Sidebar = () => {
             </button>
           </div>
           {routes.map(renderRoute)}
+        </div>
+      </div>
+      <div>
+        <div className="flex justify-center items-center p-4">
+          <button onClick={() => handleLogout()} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
+            <FaSignOutAlt size={24} />
+            {isOpen && <span className="pl-4">Sair</span>}
+          </button>
         </div>
       </div>
     </div>
