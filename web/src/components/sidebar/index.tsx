@@ -10,7 +10,7 @@ const routes = [
 ];
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -31,8 +31,7 @@ const Sidebar = () => {
       <div className="flex flex-col flex-grow justify-between">
         <div className="p-2">
           <div className="p-4 pb-2 flex justify-between items-center">
-
-            <img src={logo} className={`overflow-hidden transition-all ${isOpen ? "w-32" : "w-0"}`} />
+            <img src={logo} className={`overflow-hidden transition-all ${isOpen ? "w-32 mr-2" : "w-0"}`} />
             <button onClick={() => toggleSidebar()} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
               {isOpen ? <FaArrowLeft size={24} /> : <FaArrowRight size={24} />}
             </button>
