@@ -1,16 +1,18 @@
 import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../../context/AuthContext';
+import SelectEnterprise from '../components/Input';
 
 const CreateCard = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, control } = useForm();
+  const { userId } = useAuth();
 
   const onSubmit = async (data: any) => {
     try {
       const res = await api.post("/cards", {
         ...data,
-        clienteId: 4,
-        empresaId: 1,
+        clienteId: userId,
       });
 
       if (res.status >= 200 && res.status < 300) {
@@ -40,7 +42,7 @@ const CreateCard = () => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
-                Nome
+                Apelido
               </label>
               <input
                 type="text"
@@ -64,6 +66,17 @@ const CreateCard = () => {
                 placeholder="Digite o número"
               />
               {errors.numero && <span className="text-red-500">Este campo é obrigatório</span>}
+            </div>
+
+            <div className="col-span-1 sm:col-span-2">
+              <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
+                Selecione a empresa
+              </label>
+              <SelectEnterprise
+                name="empresaId"
+                control={control}
+                error={errors.empresaId ? 'Este campo é obrigatório' : undefined}
+              />
             </div>
           </div>
 

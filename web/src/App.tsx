@@ -1,19 +1,27 @@
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import './App.css'
 import Home from './pages/home';
 import Register from './pages/auth/register';
 import CreateEnterprise from './pages/enterprise/create';
 import CreateCard from './pages/card/create';
 import Login from './pages/auth/login';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import GetEnterprise from './pages/enterprise/get';
 import Sidebar from './components/sidebar';
+import './App.css'
+import 'react-toastify/dist/ReactToastify.css';
+import GetCards from './pages/card/get';
+import { jwtDecode } from "jwt-decode";
+import { AuthProvider } from './context/AuthContext';
+
+const isTokenExpired = (token: string): boolean => {
+  const { exp } = jwtDecode<{ exp: number }>(token);
+  return Date.now() >= exp * 1000;
+}
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const token = localStorage.getItem('authToken');
-  console.log(token)
-  if (!token) {
+
+  if (!token || isTokenExpired(token)) {
     return <Navigate to="/auth/login" />;
   }
 
@@ -66,11 +74,19 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: '/card',
+    element: (
+      <ProtectedRoute>
+        <GetCards />
+      </ProtectedRoute>
+    ),
+  },
 ]);
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <RouterProvider router={router} />
       <ToastContainer
         position="top-right"
@@ -83,7 +99,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
-    </>
+    </AuthProvider>
   );
 }
 

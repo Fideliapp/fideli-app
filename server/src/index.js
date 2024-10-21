@@ -134,10 +134,15 @@ app.get('/enterprise', async (req, res) => {
 
 app.post("/cards", async (req, res) => {
   try {
-    const { ...data } = req.body;
+    const { clienteId, empresaId, nome, numero } = req.body;
 
     const newCard = await prisma.cartao.create({
-      data
+      data: {
+        nome,
+        numero,
+        clienteId: parseInt(clienteId),
+        empresaId: parseInt(empresaId)
+      }
     });
 
     res.status(201).json(newCard);
@@ -147,9 +152,18 @@ app.post("/cards", async (req, res) => {
   }
 });
 
-app.get("/cards", async (req, res) => {
+app.get("/cards/:userId", async (req, res) => {
+  const { userId } = req.params;
+
   try {
-    const cards = await prisma.cartao.findMany();
+    const cards = await prisma.cartao.findMany({
+      include: {
+        empresa: true
+      },
+      where: {
+        clienteId: parseInt(userId)
+      }
+    });
     res.status(200).json(cards);
   } catch (error) {
     console.error(error);
