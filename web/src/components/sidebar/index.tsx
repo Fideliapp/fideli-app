@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { FaHome, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt } from "react-icons/fa"; // Importando o ícone de logout
+import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 
 const routes = [
-  { path: "/", name: "Inicio", icon: <FaHome size={24} /> },
+  { path: "/", name: "Graficos", icon: <FaChartBar size={24} /> },
   { path: "/card", name: "Cartão", icon: <FaCreditCard size={24} /> },
   { path: "/enterprise", name: "Empresas", icon: <FaUsers size={24} /> },
 ];
