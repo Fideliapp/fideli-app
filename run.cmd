@@ -1,9 +1,12 @@
 @echo off
 
+:: Iniciar o XAMPP Control
 start "" "C:\xampp\xampp-control.exe"
 
-start cmd /k "cd /d ./web && npm run dev"
+:: Navegar para a pasta web, instalar dependências e iniciar o servidor
+start cmd /k "cd /d ./web && npm install && npm run dev"
 
-start cmd /k "cd /d ./server && npm run dev"
+:: Navegar para a pasta server, executar as migrações do Prisma e gerar o cliente Prisma
+start cmd /k "cd /d ./server && npm install && npx prisma generate && npm run dev"
 
 pause
