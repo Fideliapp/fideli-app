@@ -1,7 +1,8 @@
 const express = require('express');
 const prisma = require('./service/prisma');
 const cors = require('cors');
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const { authenticateToken } = require('./middleware/auth');
 
 const app = express();
 
@@ -14,20 +15,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.status(401).json({ message: 'Você não está autenticado.' });
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Token invalido' });
-    req.user = user;
-    next();
-  });
-};
 
 app.post("/login", async (req, res) => {
   try {
@@ -190,8 +177,7 @@ app.get("/cards/:id", async (req, res) => {
 });
 
 app.use((err, _, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Internal Server Error" });
+  res.status(500).json({ message: "Internal Server Error", error: err });
 
   next()
 });
