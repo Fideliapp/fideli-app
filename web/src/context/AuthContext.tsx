@@ -14,6 +14,7 @@ interface DecodedToken {
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [cpf, setCpf] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -22,9 +23,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const decoded: DecodedToken = jwtDecode(token);
         setUserId(decoded.id);
+        setCpf(decoded.cpf);
+
       } catch (error) {
         console.error('Invalid token', error);
         setUserId(null);
+        setCpf(null);
       }
     }
   }, []);
