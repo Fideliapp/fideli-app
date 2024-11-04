@@ -7,14 +7,8 @@ export const create = async (req: Request, res: Response): Promise<void> => {
       body: { cartaoId, valor, clienteId, empresaId },
     } = req;
 
-    console.log({
-      cartaoId,
-      valor,
-      clienteId,
-      empresaId,
-    });
-
-    const pontosAcumulados = Math.floor(valor / 10);
+    // Calcular os pontos acumulados baseados no valor gasto
+    const pontosAcumulados = Math.floor(valor / 10); // Cada 10 reais gastos dão 1 ponto
 
     await prisma.$transaction(async (client) => {
       await client.compras.create({
@@ -26,6 +20,19 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         },
       });
 
+      const acumulado = await client.pontos.findUniqueOrThrow({
+        where: {
+          clienteId_empresaId: {
+            clienteId,
+            empresaId,
+          },
+        },
+        select: {
+          valorAcumulado: true,
+          pontos: true,
+        },
+      });
+
       await client.pontos.upsert({
         where: {
           clienteId_empresaId: {
@@ -34,14 +41,18 @@ export const create = async (req: Request, res: Response): Promise<void> => {
           },
         },
         update: {
+          valorAcumulado: {
+            increment: valor,
+          },
           pontos: {
-            increment: pontosAcumulados,
+            increment: Math.floor((acumulado?.valorAcumulado + valor) / 10) - Math.floor(acumulado?.valorAcumulado / 10),
           },
         },
         create: {
           clienteId,
           empresaId,
           pontos: pontosAcumulados,
+          valorAcumulado: valor,
         },
       });
     });

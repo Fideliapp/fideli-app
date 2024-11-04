@@ -104,10 +104,11 @@ model Beneficios {
 }
 
 model Pontos {
-  id        Int @id @default(autoincrement())
-  clienteId Int
-  empresaId Int
-  pontos    Int @default(0)
+  id             Int   @id @default(autoincrement())
+  clienteId      Int
+  empresaId      Int
+  pontos         Int   @default(0)
+  valorAcumulado Float @default(0.0)
 
   cliente Client  @relation(fields: [clienteId], references: [id])
   empresa Empresa @relation(fields: [empresaId], references: [id])
