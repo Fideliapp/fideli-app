@@ -23,6 +23,7 @@ model Client {
   Endereco Endereco[]
   Cartao   Cartao[]
   Compras  Compras[]
+  Pontos   Pontos[]
 }
 
 model Endereco {
@@ -50,46 +51,28 @@ model Cartao {
   Transacoes Transacoes[]
 }
 
-model Ramo {
-  id        Int       @id @default(autoincrement())
-  nome      String
-  descricao String
-  Empresa   Empresa[]
-}
-
 model Empresa {
   id          Int    @id @default(autoincrement())
   nome        String
   cnpj        String @unique
   responsavel String
   email       String
-  ramoId      Int
 
-  ramo       Ramo         @relation(fields: [ramoId], references: [id])
   Cartao     Cartao[]
   Promocoes  Promocoes[]
   Transacoes Transacoes[]
+  Pontos     Pontos[]
 }
 
 model Compras {
   id        Int      @id @default(autoincrement())
-  clienteId Int
   cartaoId  Int
+  clienteId Int
   valor     Float
   data      DateTime
-  notaId    Int
 
-  nota    NotaFiscal @relation(fields: [notaId], references: [id])
-  cliente Client     @relation(fields: [clienteId], references: [id])
-  cartao  Cartao     @relation(fields: [cartaoId], references: [id])
-}
-
-model NotaFiscal {
-  id       Int       @id @default(autoincrement())
-  compraId Int
-  valor    Float
-  data     DateTime
-  Compras  Compras[]
+  cliente Client @relation(fields: [clienteId], references: [id])
+  cartao  Cartao @relation(fields: [cartaoId], references: [id])
 }
 
 model Transacoes {
@@ -118,4 +101,16 @@ model Beneficios {
   id        Int    @id @default(autoincrement())
   desconto  Float
   descricao String
+}
+
+model Pontos {
+  id        Int @id @default(autoincrement())
+  clienteId Int
+  empresaId Int
+  pontos    Int @default(0)
+
+  cliente Client  @relation(fields: [clienteId], references: [id])
+  empresa Empresa @relation(fields: [empresaId], references: [id])
+
+  @@unique([clienteId, empresaId])
 }

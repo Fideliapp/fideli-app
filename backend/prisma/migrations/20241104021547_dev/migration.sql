@@ -111,6 +111,16 @@ CREATE TABLE `Beneficios` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `Pontos` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `clienteId` INTEGER NOT NULL,
+    `empresaId` INTEGER NOT NULL,
+    `pontos` INTEGER NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Endereco` ADD CONSTRAINT `Endereco_clienteId_fkey` FOREIGN KEY (`clienteId`) REFERENCES `Client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -140,3 +150,9 @@ ALTER TABLE `Transacoes` ADD CONSTRAINT `Transacoes_cartaoId_fkey` FOREIGN KEY (
 
 -- AddForeignKey
 ALTER TABLE `Promocoes` ADD CONSTRAINT `Promocoes_empresaId_fkey` FOREIGN KEY (`empresaId`) REFERENCES `Empresa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Pontos` ADD CONSTRAINT `Pontos_clienteId_fkey` FOREIGN KEY (`clienteId`) REFERENCES `Client`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Pontos` ADD CONSTRAINT `Pontos_empresaId_fkey` FOREIGN KEY (`empresaId`) REFERENCES `Empresa`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

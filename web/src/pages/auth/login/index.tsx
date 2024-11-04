@@ -14,7 +14,7 @@ const Login = () => {
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const res = await api.post("/login", data);
+      const res = await api.post("/auth/login", data);
       const { token } = res.data;
 
       localStorage.setItem('authToken', token);
