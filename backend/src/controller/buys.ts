@@ -7,8 +7,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
       body: { cartaoId, valor, clienteId, empresaId },
     } = req;
 
-    // Calcular os pontos acumulados baseados no valor gasto
-    const pontosAcumulados = Math.floor(valor / 10); // Cada 10 reais gastos dão 1 ponto
+    const pontosAcumulados = Math.floor(valor / 10);
 
     await prisma.$transaction(async (client) => {
       await client.compras.create({
