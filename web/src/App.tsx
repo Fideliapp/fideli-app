@@ -12,6 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import GetCards from './pages/card/get';
 import { jwtDecode } from "jwt-decode";
 import { AuthProvider } from './context/AuthContext';
+import GetBuys from './pages/buys/get';
+import CreateBuy from './pages/buys/create';
 
 const isTokenExpired = (token: string): boolean => {
   const { exp } = jwtDecode<{ exp: number }>(token);
@@ -79,6 +81,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <GetCards />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/buys',
+    element: (
+      <ProtectedRoute>
+        <GetBuys />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/buys/create',
+    element: (
+      <ProtectedRoute>
+        <CreateBuy />
       </ProtectedRoute>
     ),
   },

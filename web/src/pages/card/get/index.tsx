@@ -18,10 +18,12 @@ const GetCards = () => {
   const { userId } = useAuth();
 
   useEffect(() => {
-    api.get(`/cards/${userId}`).then((response) => {
+    if (userId == null) return
+
+    api.get(`/card/user/${userId}`).then((response) => {
       setCards(response.data);
     });
-  }, []);
+  }, [userId]);
 
   return (
     <div className="bg-gray-100 min-h-screen w-full p-4">

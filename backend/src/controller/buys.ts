@@ -62,3 +62,29 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: "Erro ao cadastrar a compra." });
   }
 };
+
+export const getByUser = async (req: Request, res: Response): Promise<void> => {
+  const { clienteId } = req.params
+
+  try {
+    const pontos = await prisma.pontos.findMany({
+      where: { clienteId: Number(clienteId) },
+      select: {
+        id: true,
+        pontos: true,
+        valorAcumulado: true,
+        empresa: {
+          select: {
+            id: true,
+            nome: true
+          }
+        }
+      }
+    });
+
+    res.status(200).json(pontos);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Erro ao buscar pontos do usuário." });
+  }
+}

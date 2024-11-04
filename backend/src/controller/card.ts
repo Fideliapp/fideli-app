@@ -50,7 +50,7 @@ export const getById = async (req: Request, res: Response): Promise<any> => {
     if (card) {
       res.json(card);
     } else {
-      res.status(404).json({ message: "Card not found" });
+      res.status(404).json({ message: "Cartão não encontrado" });
     }
   } catch (error) {
     console.error(error);
