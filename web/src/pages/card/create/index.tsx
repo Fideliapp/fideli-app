@@ -10,7 +10,7 @@ const CreateCard = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const res = await api.post("/cards", {
+      const res = await api.post("/card", {
         ...data,
         clienteId: userId,
       });
