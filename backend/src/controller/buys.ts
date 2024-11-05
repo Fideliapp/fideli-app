@@ -129,6 +129,45 @@ export const getPointsEnterpriseChart = async (req: Request, res: Response): Pro
     res.status(200).json(formattedResponse)
 
   } catch (error) {
-
+    res.status(400).send({
+      message: "Ops, Algo deu errado",
+      error
+    })
   }
 }
+
+export const getUserPointsHistory = async (req: Request, res: Response): Promise<void> => {
+  const { clienteId } = req.params;
+
+  try {
+    const totalGastoRaw = await prisma.$queryRaw`
+      SELECT DATE(data) as data, SUM(valor) as total
+      FROM Transacoes
+      WHERE clienteId = ${Number(clienteId)}
+      GROUP BY DATE(data)
+    `;
+
+    const totalGasto = (totalGastoRaw as { data: Date, total: number }[]).map((item: { data: Date, total: number }) => ({
+      data: item.data,
+      _sum: { valor: item.total }
+    }));
+
+    if (!totalGasto || totalGasto.length === 0) {
+      res.status(404).json({ message: "Nenhum histórico encontrado para este cliente." });
+    }
+
+    // Mapeia o resultado para retornar data e total de valor por data
+    const result = totalGasto.map(item => ({
+      data: item.data,
+      total: item._sum.valor,
+    }));
+
+    res.status(200).json(result);
+
+  } catch (error) {
+    res.status(400).json({
+      message: "Ops, algo deu errado.",
+      error
+    });
+  }
+};
