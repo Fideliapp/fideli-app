@@ -16,7 +16,6 @@ export const create = async (req: Request, res: Response): Promise<any> => {
 
     res.status(201).json(newCard);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

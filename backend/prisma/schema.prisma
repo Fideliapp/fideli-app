@@ -20,10 +20,11 @@ model Client {
   email String
   senha String
 
-  Endereco Endereco[]
-  Cartao   Cartao[]
-  Compras  Compras[]
-  Pontos   Pontos[]
+  Endereco   Endereco[]
+  Cartao     Cartao[]
+  Compras    Compras[]
+  Pontos     Pontos[]
+  Transacoes Transacoes[]
 }
 
 model Endereco {
@@ -81,7 +82,9 @@ model Transacoes {
   data      DateTime
   cartaoId  Int
   empresaId Int
+  clienteId Int
 
+  cliente Client  @relation(fields: [clienteId], references: [id])
   empresa Empresa @relation(fields: [empresaId], references: [id])
   cartao  Cartao  @relation(fields: [cartaoId], references: [id])
 }

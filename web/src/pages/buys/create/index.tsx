@@ -3,7 +3,7 @@ import api from '../../../services/api';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../context/AuthContext';
 import SelectEnterprise from '../components/EnterpriseInput';
-import SelectCard from '../components/CardINput';
+import SelectCard from '../components/CardInput';
 import { useNavigate } from 'react-router-dom';
 
 const CreateBuy = () => {
@@ -25,7 +25,7 @@ const CreateBuy = () => {
 
       if (res.status >= 200 && res.status < 300) {
         toast.success("Cadastro realizado com sucesso!");
-        navigate('/buys ')
+        navigate('/buys')
       } else {
         toast.error(res.data.message || "Ops... algo deu errado.");
       }

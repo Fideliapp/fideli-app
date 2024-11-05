@@ -1,6 +1,30 @@
+import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
+import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+
+interface getUserPoints {
+  id: number;
+  nome: string;
+  pontos: number;
+}
 
 function Home() {
+  const [barChartData, setBarChartData] = useState<number[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  const { userId } = useAuth();
+
+  useEffect(() => {
+    if (userId == null) return;
+
+    api.get(`/buys/points-by-enterprise/${userId}`).then((response) => {
+      const pointsData = response.data.map((item: getUserPoints) => item.pontos);
+      const categoryData = response.data.map((item: getUserPoints) => item.nome);
+      setBarChartData(pointsData);
+      setCategories(categoryData);
+    });
+  }, [userId]);
 
   const barChartOptions = {
     chart: {
@@ -17,7 +41,7 @@ function Home() {
       enabled: false,
     },
     xaxis: {
-      categories: ['Empresa A', 'Empresa B', 'Empresa C', 'Empresa D', 'Empresa E'],
+      categories: categories,
     },
     yaxis: {
       title: {
@@ -34,7 +58,7 @@ function Home() {
   const barChartSeries = [
     {
       name: 'Pontos',
-      data: [44, 55, 41, 67, 22],
+      data: barChartData,
     },
   ];
 
