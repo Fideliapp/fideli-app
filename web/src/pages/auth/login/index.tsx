@@ -2,6 +2,8 @@ import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
+import { FaEye } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 
 interface LoginFormInputs {
   cpf: string;
@@ -11,6 +13,7 @@ interface LoginFormInputs {
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data: LoginFormInputs) => {
     try {
@@ -25,6 +28,12 @@ const Login = () => {
       toast.error('Erro no login, por favor, tente novamente.');
     }
   };
+
+  const handleShowPassword = () => setShowPassword(!showPassword);
+
+  useEffect(() => {
+    console.log(showPassword)
+  }, [showPassword])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -46,22 +55,24 @@ const Login = () => {
               />
               {errors.cpf && <span className="text-red-500">Este campo é obrigatório</span>}
             </div>
-
-            <div className="col-span-1 sm:col-span-2">
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Senha
-              </label>
+            <div className='col-span-1 sm:col-span-2 flex flex-row shadow-sm border rounded-md justify-center'>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 id="password"
                 {...register('pass', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.pass ? 'border-red-500' : ''}`}
+                className={`w-full px-3 py-2 mt-1 text-gray-900 border-none rounded-md outline-none appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.pass ? 'border-red-500' : ''}`}
                 placeholder="••••••••"
               />
-              {errors.pass && <span className="text-red-500">Este campo é obrigatório</span>}
+              <button
+                type="button"
+                onClick={() => handleShowPassword}
+                className="flex items-center mr-2 text-gray-500"
+              >
+                <FaEye />
+              </button>
             </div>
+            {errors.pass && <span className="text-red-500">Este campo é obrigatório</span>}
           </div>
-
           <div>
             <input
               type="submit"
