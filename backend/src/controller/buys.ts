@@ -156,7 +156,6 @@ export const getUserPointsHistory = async (req: Request, res: Response): Promise
       res.status(404).json({ message: "Nenhum histórico encontrado para este cliente." });
     }
 
-    // Mapeia o resultado para retornar data e total de valor por data
     const result = totalGasto.map(item => ({
       data: item.data,
       total: item._sum.valor,

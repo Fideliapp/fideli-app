@@ -8,9 +8,10 @@ interface GetUserPoints {
   nome: string;
   pontos: number;
 }
+
 interface TotalSpend {
   data: string;
-  valor: number;
+  total: number;
 }
 
 function Home() {
@@ -18,7 +19,7 @@ function Home() {
   const [categories, setCategories] = useState<string[]>([]);
 
   const [lineChartData, setLineChartData] = useState<string[]>([]);
-  const [spend, setSpend] = useState<number[]>([])
+  const [spend, setSpend] = useState<number[]>([]);
 
   const { userId } = useAuth();
 
@@ -38,9 +39,9 @@ function Home() {
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
         return formattedDate;
       });
-      const categoryData = response.data.map((item: TotalSpend) => item.valor);
+      const totalSpendData = response.data.map((item: TotalSpend) => item.total);
       setLineChartData(spendData);
-      setSpend(categoryData);
+      setSpend(totalSpendData);
     });
   }, [userId]);
 
@@ -86,15 +87,15 @@ function Home() {
       height: 350,
     },
     title: {
-      text: 'Gastos',
+      text: 'Total Gasto',
       align: 'center',
     },
     xaxis: {
-      categories: lineChartData
+      categories: lineChartData,
     },
     yaxis: {
       title: {
-        text: 'Pontos',
+        text: 'Total Gasto (R$)',
       },
     },
     stroke: {
@@ -112,7 +113,7 @@ function Home() {
 
   const lineChartSeries = [
     {
-      name: 'Pontos do Usuário',
+      name: 'Total Gasto',
       data: spend,
     },
   ];
