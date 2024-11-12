@@ -14,11 +14,12 @@ datasource db {
 }
 
 model Client {
-  id    Int    @id @default(autoincrement())
-  CPF   String @unique
+  id    Int     @id @default(autoincrement())
+  CPF   String  @unique
   tel   String
   email String
   senha String
+  admin Boolean @default(false)
 
   Endereco   Endereco[]
   Cartao     Cartao[]
