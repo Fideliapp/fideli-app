@@ -3,34 +3,42 @@ import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextProps {
   userId: string | null;
+  isAdmin: boolean
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 interface DecodedToken {
   id: string;
-  cpf: string;
+  isAdmin: boolean
 }
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean | false>(false)
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-
     if (token) {
       try {
         const decoded: DecodedToken = jwtDecode(token);
         setUserId(decoded.id);
+        setIsAdmin(decoded.isAdmin)
+
+        console.log({
+          decoded
+        })
+
       } catch (error) {
         console.error('Invalid token', error);
         setUserId(null);
+        setIsAdmin(false)
       }
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userId }}>
+    <AuthContext.Provider value={{ userId, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );
@@ -41,6 +49,7 @@ const useAuth = (): AuthContextProps => {
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
+
   return context;
 };
 

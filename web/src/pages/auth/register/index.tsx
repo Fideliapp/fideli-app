@@ -9,7 +9,7 @@ const Register = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      const res = await api.post("/register", { ...data });
+      const res = await api.post("/auth/register", { ...data });
 
       if (res.status >= 200 && res.status < 300) {
         toast.success("Cadastro realizado com sucesso!");

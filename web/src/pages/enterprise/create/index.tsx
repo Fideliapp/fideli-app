@@ -1,19 +1,21 @@
 import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CreateEnterprise = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     try {
       const res = await api.post("/enterprise", {
         ...data,
-        ramoId: 1,
       });
 
       if (res.status >= 200 && res.status < 300) {
         toast.success("Cadastro realizado com sucesso!");
+        navigate('/enterprise');
       } else {
         toast.error(res.data.message || "Ops... algo deu errado.");
       }

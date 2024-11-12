@@ -1,6 +1,50 @@
+import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
+import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
+import { Table } from '../../components/table';
+
+interface GetUserPoints {
+  id: number;
+  nome: string;
+  pontos: number;
+}
+
+interface TotalSpend {
+  data: string;
+  total: number;
+}
 
 function Home() {
+  const [barChartData, setBarChartData] = useState<number[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  const [lineChartData, setLineChartData] = useState<string[]>([]);
+  const [spend, setSpend] = useState<number[]>([]);
+
+  const { userId } = useAuth();
+
+  useEffect(() => {
+    if (userId == null) return;
+
+    api.get(`/buys/points-by-enterprise/${userId}`).then((response) => {
+      const pointsData = response.data.map((item: GetUserPoints) => item.pontos);
+      const categoryData = response.data.map((item: GetUserPoints) => item.nome);
+      setBarChartData(pointsData);
+      setCategories(categoryData);
+    });
+
+    api.get(`/buys/total-spend/${userId}`).then((response) => {
+      const spendData = response.data.map((item: TotalSpend) => {
+        const date = new Date(item.data);
+        const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
+        return formattedDate;
+      });
+      const totalSpendData = response.data.map((item: TotalSpend) => item.total);
+      setLineChartData(spendData);
+      setSpend(totalSpendData);
+    });
+  }, [userId]);
 
   const barChartOptions = {
     chart: {
@@ -17,7 +61,7 @@ function Home() {
       enabled: false,
     },
     xaxis: {
-      categories: ['Empresa A', 'Empresa B', 'Empresa C', 'Empresa D', 'Empresa E'],
+      categories: categories,
     },
     yaxis: {
       title: {
@@ -34,7 +78,7 @@ function Home() {
   const barChartSeries = [
     {
       name: 'Pontos',
-      data: [44, 55, 41, 67, 22],
+      data: barChartData,
     },
   ];
 
@@ -44,19 +88,15 @@ function Home() {
       height: 350,
     },
     title: {
-      text: 'Pontos do Usuário por Mês',
+      text: 'Total Gasto',
       align: 'center',
     },
     xaxis: {
-      categories: [
-        'Jan', 'Fev', 'Mar', 'Abr', 'Mai',
-        'Jun', 'Jul', 'Ago', 'Set', 'Out',
-        'Nov', 'Dez'
-      ],
+      categories: lineChartData,
     },
     yaxis: {
       title: {
-        text: 'Pontos',
+        text: 'Total Gasto (R$)',
       },
     },
     stroke: {
@@ -74,8 +114,8 @@ function Home() {
 
   const lineChartSeries = [
     {
-      name: 'Pontos do Usuário',
-      data: [30, 45, 28, 60, 50, 70, 40, 80, 90, 65, 75, 85],
+      name: 'Total Gasto',
+      data: spend,
     },
   ];
 
@@ -92,6 +132,7 @@ function Home() {
       </div>
     </div>
   );
+
 }
 
 export default Home;
