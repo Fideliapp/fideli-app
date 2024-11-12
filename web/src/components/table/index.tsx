@@ -1,42 +1,44 @@
-interface TableProps {
-  data: Array<Record<string, any>>;
+import React from 'react';
+
+interface Column<T> {
+  key: keyof T;
+  label: string;
+  render?: (row: T) => React.ReactNode; // Optional render function
 }
 
-export const Table = (props: TableProps) => {
-  const { data } = props;
+interface TableProps<T> {
+  columns: Column<T>[];
+  data: T[];
+}
 
-  const headers = data.length > 0 ? Object.keys(data[0]) : [];
-
+const Table = <T,>({ columns, data }: TableProps<T>) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse text-sm text-left text-gray-700">
-        <thead>
-          <tr>
-            {headers.map((header) => (
-              <th
-                key={header}
-                className="px-4 py-2 border-b border-gray-200 bg-gray-50 font-semibold text-gray-600 uppercase"
-              >
-                {header}
-              </th>
+    <table className="min-w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+      <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+        <tr>
+          {columns.map((column) => (
+            <th key={String(column.key)} className="py-3 px-6 text-left">
+              {column.label}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody className="text-gray-700 text-sm font-light">
+        {data.map((row, rowIndex) => (
+          <tr
+            key={rowIndex}
+            className="border-b border-gray-200 hover:bg-gray-100"
+          >
+            {columns.map((column) => (
+              <td key={String(column.key)} className="py-3 px-6 text-left">
+                {column.render ? column.render(row) : String(row[column.key])}
+              </td>
             ))}
           </tr>
-        </thead>
-        <tbody>
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="hover:bg-gray-50">
-              {headers.map((header) => (
-                <td
-                  key={header}
-                  className="px-4 py-2 border-b border-gray-200 text-gray-800"
-                >
-                  {row[header] ?? "-"}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
 };
+
+export default Table;

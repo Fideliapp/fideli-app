@@ -17,7 +17,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     const validPassword = await bcrypt.compare(pass, client.senha);
     if (!validPassword) return res.status(401).send({ message: "Usuário ou senha inválidos" });
 
-    const token = sign(client.id, cpf);
+    const token = sign(client.id, client.admin);
 
     res.status(200).json({ message: "Autenticado com sucesso", token });
   } catch (error) {
@@ -52,3 +52,38 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     res.status(500).json({ message: "Internal Server Error", error });
   }
 };
+
+export const getUsers = async (req: Request, res: Response): Promise<any> => {
+  const users = await prisma.client.findMany({
+    select: {
+      id: true,
+      admin: true,
+      email: true,
+      tel: true,
+    }
+  })
+
+  res.status(200).json(users)
+}
+
+export const toggleAdmin = async (req: Request, res: Response): Promise<any> => {
+  const { userId } = req.params;
+
+  try {
+    const updated = await prisma.client.update({
+      data: {
+        admin: true,
+      },
+      where: {
+        id: Number(userId)
+      }
+    });
+
+    res.status(200).send(updated);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+

@@ -170,3 +170,27 @@ export const getUserPointsHistory = async (req: Request, res: Response): Promise
     });
   }
 };
+
+export const getResume = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const resume = prisma.empresa.findMany({
+      select: {
+        id: true,
+        nome: true,
+        _count: {
+          select: {
+            Pontos: true,
+          }
+        }
+      },
+    })
+
+    res.status(200).json(resume)
+
+  } catch (error) {
+    res.status(400).json({
+      message: "Ops, algo deu errado.",
+      error
+    });
+  }
+}

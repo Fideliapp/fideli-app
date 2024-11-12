@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { Table } from '../../components/table';
 
 interface GetUserPoints {
   id: number;
@@ -131,6 +132,7 @@ function Home() {
       </div>
     </div>
   );
+
 }
 
 export default Home;

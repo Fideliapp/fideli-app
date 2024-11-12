@@ -4,16 +4,17 @@ import Register from './pages/auth/register';
 import CreateEnterprise from './pages/enterprise/create';
 import CreateCard from './pages/card/create';
 import Login from './pages/auth/login';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import GetEnterprise from './pages/enterprise/get';
 import Sidebar from './components/sidebar';
 import './App.css'
 import 'react-toastify/dist/ReactToastify.css';
 import GetCards from './pages/card/get';
 import { jwtDecode } from "jwt-decode";
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import GetBuys from './pages/buys/get';
 import CreateBuy from './pages/buys/create';
+import Reports from './pages/reports';
 
 const isTokenExpired = (token: string): boolean => {
   const { exp } = jwtDecode<{ exp: number }>(token);
@@ -35,6 +36,22 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   );
 };
 
+const AdminRoute = ({ children }: { children: JSX.Element }) => {
+  const { isAdmin } = useAuth()
+
+  if (!isAdmin) {
+    toast.error("Você não tem permissão");
+
+    return <Navigate to="/card" />
+  }
+
+  return (
+    <ProtectedRoute>
+      {children}
+    </ProtectedRoute>
+  );
+}
+
 const router = createBrowserRouter([
   {
     path: '/auth/register',
@@ -55,9 +72,9 @@ const router = createBrowserRouter([
   {
     path: '/enterprise/create',
     element: (
-      <ProtectedRoute>
+      <AdminRoute>
         <CreateEnterprise />
-      </ProtectedRoute>
+      </AdminRoute>
     ),
   },
   {
@@ -100,6 +117,14 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
+  {
+    path: '/reports',
+    element: (
+      <AdminRoute>
+        <Reports />
+      </AdminRoute>
+    )
+  }
 ]);
 
 function App() {
