@@ -22,7 +22,7 @@ const isTokenExpired = (token: string): boolean => {
 }
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('auth');
 
   if (!token || isTokenExpired(token)) {
     return <Navigate to="/auth/login" />;

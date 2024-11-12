@@ -17,17 +17,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | false>(false)
 
+
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('auth');
     if (token) {
       try {
         const decoded: DecodedToken = jwtDecode(token);
         setUserId(decoded.id);
         setIsAdmin(decoded.isAdmin)
-
-        console.log({
-          decoded
-        })
 
       } catch (error) {
         console.error('Invalid token', error);

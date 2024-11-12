@@ -20,7 +20,7 @@ const Login = () => {
       const res = await api.post("/auth/login", data);
       const { token } = res.data;
 
-      localStorage.setItem('authToken', token);
+      localStorage.setItem('auth', token);
       toast.success("Autenticado com sucesso");
       navigate('/enterprise');
     } catch (error) {
