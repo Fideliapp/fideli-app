@@ -10,6 +10,15 @@ interface LoginFormInputs {
   pass: string;
 }
 
+const setToken = (token: string | null) => {
+  if (token) {
+    localStorage.setItem('auth', token);
+  } else {
+    localStorage.removeItem('auth');
+  }
+  window.dispatchEvent(new Event('auth-changed'));
+};
+
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
   const navigate = useNavigate();
@@ -20,7 +29,7 @@ const Login = () => {
       const res = await api.post("/auth/login", data);
       const { token } = res.data;
 
-      localStorage.setItem('authToken', token);
+      setToken(token);
       toast.success("Autenticado com sucesso");
       navigate('/enterprise');
     } catch (error) {

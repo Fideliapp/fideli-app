@@ -40,6 +40,31 @@ model Endereco {
   cliente   Client @relation(fields: [clienteId], references: [id])
 }
 
+model NotaFiscal {
+  id        Int      @id @default(autoincrement())
+  valor     Float
+  data      DateTime
+  nf        String   @unique
+  empresaId Int
+  compraId  Int?     @unique
+
+  empresa Empresa  @relation(fields: [empresaId], references: [id])
+  compra  Compras? @relation("NotaFiscalToCompras")
+}
+
+model Compras {
+  id        Int      @id @default(autoincrement())
+  cartaoId  Int
+  clienteId Int
+  valor     Float
+  data      DateTime
+  notaId    Int?     @unique
+
+  cliente    Client      @relation(fields: [clienteId], references: [id])
+  cartao     Cartao      @relation(fields: [cartaoId], references: [id])
+  notaFiscal NotaFiscal? @relation("NotaFiscalToCompras", fields: [notaId], references: [id])
+}
+
 model Cartao {
   id        Int    @id @default(autoincrement())
   clienteId Int
@@ -64,17 +89,7 @@ model Empresa {
   Promocoes  Promocoes[]
   Transacoes Transacoes[]
   Pontos     Pontos[]
-}
-
-model Compras {
-  id        Int      @id @default(autoincrement())
-  cartaoId  Int
-  clienteId Int
-  valor     Float
-  data      DateTime
-
-  cliente Client @relation(fields: [clienteId], references: [id])
-  cartao  Cartao @relation(fields: [cartaoId], references: [id])
+  NotaFiscal NotaFiscal[]
 }
 
 model Transacoes {
