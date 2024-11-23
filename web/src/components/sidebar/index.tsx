@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaShoppingBag, FaClipboard } from "react-icons/fa";
+import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaShoppingBag, FaClipboard, FaBarcode } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 import { useAuth } from "../../context/AuthContext";
@@ -23,7 +23,8 @@ const Sidebar = () => {
     { path: "/card", name: "Cartão", icon: <FaCreditCard size={24} /> },
     { path: "/enterprise", name: "Empresas", icon: <FaUsers size={24} /> },
     { path: "/buys", name: "Compras", icon: <FaShoppingBag size={24} /> },
-    { path: "/reports", name: "Relatorios", icon: <FaClipboard size={24} />, adminOnly: true }
+    { path: "/nf", name: "Nota Fiscal", icon: <FaBarcode size={24} />, adminOnly: true },
+    { path: "/reports", name: "Relatorios", icon: <FaClipboard size={24} />, adminOnly: true },
   ];
 
   const renderRoute = (route: Route, index: number) => (
