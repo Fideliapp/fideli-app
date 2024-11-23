@@ -5,16 +5,39 @@ import { Prisma } from '@prisma/client';
 export const create = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
-      body: { cartaoId, valor, clienteId, empresaId },
+      body: { cartaoId, clienteId, empresaId, nf },
     } = req;
 
-    const pontosAcumulados = Math.floor(valor / 10);
+    if (!cartaoId || !nf || !clienteId || !empresaId) {
+      res.status(400).json({ message: "Todos os campos são obrigatórios." });
+      return;
+    }
 
     await prisma.$transaction(async (client) => {
+      const nota = await client.notaFiscal.findUniqueOrThrow({
+        select: {
+          id: true,
+          valor: true,
+        },
+        where: {
+          nf,
+        },
+      })
+
+      if (!nota) {
+        res.status(404).json({ message: "Nota fiscal não encontrada." });
+        return;
+      }
+
+      const valor = nota.valor;
+
+      const pontosAcumulados = Math.floor(valor / 10);
+
       await client.compras.create({
         data: {
           cartaoId,
           valor,
+          notaId: nota.id,
           clienteId,
           data: new Date(),
         },
@@ -35,6 +58,8 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 
       if (!acumulado) acumulado = { valorAcumulado: 0, pontos: 0 };
 
+      const points = Math.floor((acumulado?.valorAcumulado + valor) / 10) - Math.floor(acumulado?.valorAcumulado / 10)
+
       await client.pontos.upsert({
         where: {
           clienteId_empresaId: {
@@ -47,7 +72,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
             increment: valor,
           },
           pontos: {
-            increment: Math.floor((acumulado?.valorAcumulado + valor) / 10) - Math.floor(acumulado?.valorAcumulado / 10),
+            increment: points
           },
         },
         create: {
@@ -63,7 +88,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 
     res.status(201).json({ message: "Compra cadastrada com sucesso!" });
   } catch (error) {
-    console.error(error);
+    console.error("Error buys.ts: ", error);
     res.status(500).json({ message: "Erro ao cadastrar a compra.", error });
   }
 };
