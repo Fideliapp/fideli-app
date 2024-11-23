@@ -19,8 +19,6 @@ const CreateBuy = () => {
         ...data,
         clienteId: userId,
         cartaoId: Number(data.cartaoId),
-        valor: Number(data.valor),
-        empresaId: Number(data.empresaId)
       });
 
       if (res.status >= 200 && res.status < 300) {
@@ -49,29 +47,21 @@ const CreateBuy = () => {
 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
-                Valor da compra
+                Nota Fiscal
               </label>
               <input
-                type="number"
-                id="nome"
-                {...register('valor', { required: true })}
+                type="text"
+                id="nf"
+                {...register('nf', { required: true })}
                 className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
-                placeholder="Valor da compra"
+                placeholder="Nota fiscal"
               />
               {errors.nome && <span className="text-red-500">Este campo é obrigatório</span>}
             </div>
-            <div className="col-span-1 sm:col-span-2">
-              <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
-                Selecione a empresa
-              </label>
-              <SelectEnterprise
-                name="empresaId"
-                control={control}
-                error={errors.empresaId ? 'Este campo é obrigatório' : undefined}
-              />
-            </div>
+
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
                 Selecione um cartão

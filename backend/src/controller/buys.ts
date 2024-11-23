@@ -30,11 +30,12 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         return;
       }
 
+
       const valor = nota.valor;
 
       const pontosAcumulados = Math.floor(valor / 10);
 
-      await client.compras.create({
+      const compra = await client.compras.create({
         data: {
           cartaoId,
           valor,
@@ -43,6 +44,16 @@ export const create = async (req: Request, res: Response): Promise<void> => {
           data: new Date(),
         },
       });
+
+      await client.notaFiscal.update({
+        where: {
+          id: nota.id,
+        },
+        data: {
+          compraId: compra.id,
+        },
+      });
+
 
       let acumulado = await client.pontos.findUnique({
         where: {
