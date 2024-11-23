@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../../services/api";
 import { useNavigate } from "react-router-dom";
-import { FaBuilding, FaDollarSign } from "react-icons/fa"; // Ícone para a empresa
 import { useAuth } from "../../../context/AuthContext";
 import SelectEnterprise from "../components/EnterpriseInput";
 import { useForm, Controller } from "react-hook-form";

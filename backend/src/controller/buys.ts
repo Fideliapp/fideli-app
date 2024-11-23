@@ -5,10 +5,10 @@ import { Prisma } from '@prisma/client';
 export const create = async (req: Request, res: Response): Promise<void> => {
   try {
     const {
-      body: { cartaoId, clienteId, empresaId, nf },
+      body: { cartaoId, clienteId, nf },
     } = req;
 
-    if (!cartaoId || !nf || !clienteId || !empresaId) {
+    if (!cartaoId || !nf || !clienteId) {
       res.status(400).json({ message: "Todos os campos são obrigatórios." });
       return;
     }
@@ -18,6 +18,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         select: {
           id: true,
           valor: true,
+          empresaId: true,
         },
         where: {
           nf,
@@ -47,7 +48,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         where: {
           clienteId_empresaId: {
             clienteId,
-            empresaId,
+            empresaId: nota.empresaId,
           },
         },
         select: {
@@ -64,7 +65,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         where: {
           clienteId_empresaId: {
             clienteId,
-            empresaId,
+            empresaId: nota.empresaId,
           },
         },
         update: {
@@ -77,13 +78,13 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         },
         create: {
           clienteId,
-          empresaId,
+          empresaId: nota.empresaId,
           pontos: pontosAcumulados,
           valorAcumulado: valor,
         },
       });
 
-      await createTransaction(clienteId, valor, cartaoId, empresaId, client);
+      await createTransaction(clienteId, valor, cartaoId, nota.empresaId, client);
     });
 
     res.status(201).json({ message: "Compra cadastrada com sucesso!" });
