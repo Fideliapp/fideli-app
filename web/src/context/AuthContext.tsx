@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 interface AuthContextProps {
   userId: string | null;
   isAdmin: boolean;
+  name: string;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -11,11 +12,13 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 interface DecodedToken {
   id: string;
   isAdmin: boolean;
+  name: string;
 }
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [name, setName] = useState<string>('');
 
   const updateAuthState = () => {
     const token = localStorage.getItem('auth');
@@ -24,22 +27,22 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         const decoded: DecodedToken = jwtDecode(token);
         setUserId(decoded.id);
         setIsAdmin(decoded.isAdmin);
+        setName(decoded.name);
       } catch (error) {
-        console.error('Invalid token', error);
         setUserId(null);
         setIsAdmin(false);
+        setName('');
       }
     } else {
       setUserId(null);
       setIsAdmin(false);
+      setName('');
     }
   };
 
   useEffect(() => {
-    // Initial load
     updateAuthState();
 
-    // Listen for the custom auth-changed event
     const handleAuthChange = () => updateAuthState();
     window.addEventListener('auth-changed', handleAuthChange);
 
@@ -49,7 +52,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userId, isAdmin }}>
+    <AuthContext.Provider value={{ userId, isAdmin, name }}>
       {children}
     </AuthContext.Provider>
   );
@@ -64,7 +67,6 @@ const useAuth = (): AuthContextProps => {
   return context;
 };
 
-// Utility to update token and notify
 const setToken = (token: string | null) => {
   if (token) {
     localStorage.setItem('auth', token);

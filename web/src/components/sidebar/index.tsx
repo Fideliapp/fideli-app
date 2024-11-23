@@ -11,7 +11,7 @@ const Sidebar = () => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const popupRef = useRef<HTMLDivElement>(null);
 
-  const { isAdmin } = useAuth();
+  const { isAdmin, name } = useAuth();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const togglePopup = () => setPopupOpen(!popupOpen);
@@ -101,12 +101,13 @@ const Sidebar = () => {
           ref={popupRef}
           className="absolute bottom-14 left-0 bg-white shadow-lg rounded-md p-4 z-50 w-48"
         >
-          <p className="text-gray-700 font-medium">{"Usuário"}</p>
+          <p className="text-gray-700 font-medium">{isAdmin ? `${name} ADMIN` : name}</p>
           <button
             onClick={handleLogout}
             className="mt-4 w-full text-left text-red-500 hover:text-red-700"
           >
-            <FaSignOutAlt size={20} className="inline mr-2" /> Sair
+            <FaSignOutAlt size={20} className="inline mr-2" />
+            Sair
           </button>
         </div>
       )}
