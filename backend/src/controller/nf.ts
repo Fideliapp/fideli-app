@@ -9,13 +9,31 @@ export const create = async (req: Request, res: Response): Promise<any> => {
       data: {
         data: new Date(),
         nf,
-        valor,
+        valor: parseFloat(valor),
         empresaId: parseInt(empresaId),
       }
     })
 
     res.status(201).json(newNf);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+export const getByEnterprise = async (req: Request, res: Response): Promise<any> => {
+  const { empresaId } = req.params;
+
+  try {
+    const nfs = await prisma.notaFiscal.findMany({
+      where: {
+        empresaId: parseInt(empresaId),
+      }
+    });
+
+    res.status(200).json(nfs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error", error });
   }
 };

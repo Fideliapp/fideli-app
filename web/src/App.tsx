@@ -15,6 +15,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import GetBuys from './pages/buys/get';
 import CreateBuy from './pages/buys/create';
 import Reports from './pages/reports';
+import GetNf from './pages/nf/get';
+import CreateNf from './pages/nf/create';
 
 const isTokenExpired = (token: string): boolean => {
   const { exp } = jwtDecode<{ exp: number }>(token);
@@ -38,6 +40,8 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 const AdminRoute = ({ children }: { children: JSX.Element }) => {
   const { isAdmin } = useAuth()
+
+  alert("isAdmin, " + isAdmin)
 
   if (!isAdmin) {
     toast.error("Você não tem permissão");
@@ -80,9 +84,9 @@ const router = createBrowserRouter([
   {
     path: '/enterprise',
     element: (
-      <ProtectedRoute>
+      <AdminRoute>
         <GetEnterprise />
-      </ProtectedRoute>
+      </AdminRoute>
     ),
   },
   {
@@ -124,7 +128,23 @@ const router = createBrowserRouter([
         <Reports />
       </AdminRoute>
     )
-  }
+  },
+  {
+    path: '/nf',
+    element: (
+      <ProtectedRoute>
+        <GetNf />
+      </ProtectedRoute>
+    )
+  },
+  {
+    path: '/nf/create',
+    element: (
+      <ProtectedRoute>
+        <CreateNf />
+      </ProtectedRoute>
+    )
+  },
 ]);
 
 function App() {
