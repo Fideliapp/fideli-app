@@ -88,8 +88,9 @@ const Sidebar = () => {
       </div>
       <div>
         <div className="flex flex-col items-center p-4">
-          {settings.map(renderRoute)}
-          <button onClick={togglePopup} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
+          {settings
+            .filter(route => !route.adminOnly || isAdmin)
+            .map(renderRoute)}          <button onClick={togglePopup} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
             <FaUserAlt size={24} />
             {isOpen && <span className="pl-4">Conta</span>}
           </button>
@@ -101,7 +102,7 @@ const Sidebar = () => {
           ref={popupRef}
           className="absolute bottom-14 left-0 bg-white shadow-lg rounded-md p-4 z-50 w-48"
         >
-          <p className="text-gray-700 font-medium">{isAdmin ? `${name} ADMIN` : name}</p>
+          <p className="text-gray-700 font-medium">{isAdmin ? `${name} [ADM]` : name}</p>
           <button
             onClick={handleLogout}
             className="mt-4 w-full text-left text-red-500 hover:text-red-700"
