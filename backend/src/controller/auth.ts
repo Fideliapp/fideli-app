@@ -6,10 +6,10 @@ import { isValidDocument } from '../utils/string';
 
 export const login = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { cpf, pass } = req.body;
+    const { email, pass } = req.body;
 
     const client = await prisma.client.findUnique({
-      where: { CPF: cpf }
+      where: { email }
     });
 
     if (!client) return res.status(401).send({ message: "Usuário ou senha inválidos" });
@@ -17,7 +17,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     const validPassword = await bcrypt.compare(pass, client.senha);
     if (!validPassword) return res.status(401).send({ message: "Usuário ou senha inválidos" });
 
-    const token = sign(client.id, client.admin);
+    const token = sign(client.id, client.nome, client.admin);
 
     res.status(200).json({ message: "Autenticado com sucesso", token });
   } catch (error) {
@@ -28,13 +28,17 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
 export const register = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { pass, cpf, tel, email } = req.body;
+    const { pass, cpf, tel, email, nome } = req.body;
 
     if (!isValidDocument(cpf)) return res.status(400).json({ message: "CPF inválido" });
 
     const existsCpf = await prisma.client.findUnique({ where: { CPF: cpf } });
 
     if (existsCpf) return res.status(400).json({ message: "CPF já está em uso." });
+
+    const existsEmail = await prisma.client.findUnique({ where: { email } });
+
+    if (existsEmail) return res.status(400).json({ message: "Email já está em uso." });
 
     const hashedPassword = await bcrypt.hash(pass, 10);
 
@@ -44,11 +48,13 @@ export const register = async (req: Request, res: Response): Promise<any> => {
         senha: hashedPassword,
         CPF: cpf,
         tel,
+        nome
       }
     });
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Internal Server Error", error });
   }
 };
