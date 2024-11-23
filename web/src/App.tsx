@@ -41,8 +41,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 const AdminRoute = ({ children }: { children: JSX.Element }) => {
   const { isAdmin } = useAuth()
 
-  alert("isAdmin, " + isAdmin)
-
   if (!isAdmin) {
     toast.error("Você não tem permissão");
 

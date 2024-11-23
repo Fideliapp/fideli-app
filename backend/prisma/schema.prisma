@@ -15,9 +15,10 @@ datasource db {
 
 model Client {
   id    Int     @id @default(autoincrement())
+  nome  String
   CPF   String  @unique
   tel   String
-  email String
+  email String  @unique
   senha String
   admin Boolean @default(false)
 

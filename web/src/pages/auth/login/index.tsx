@@ -6,7 +6,7 @@ import { FaEye } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
 interface LoginFormInputs {
-  cpf: string;
+  email: string;
   pass: string;
 }
 
@@ -52,17 +52,17 @@ const Login = () => {
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="col-span-1 sm:col-span-2">
-              <label htmlFor="cpf" className="block text-sm font-medium text-gray-700">
-                CPF
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                email
               </label>
               <input
-                type="text"
+                type="email"
                 id="cpf"
-                {...register('cpf', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.cpf ? 'border-red-500' : ''}`}
-                placeholder="000.000.000-00"
+                {...register('email', { required: true })}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.email ? 'border-red-500' : ''}`}
+                placeholder="email"
               />
-              {errors.cpf && <span className="text-red-500">Este campo é obrigatório</span>}
+              {errors.email && <span className="text-red-500">Este campo é obrigatório</span>}
             </div>
             <div className='col-span-1 sm:col-span-2 flex flex-row shadow-sm border rounded-md justify-center'>
               <input

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaShoppingBag, FaClipboard, FaBarcode } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
+import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaUserAlt, FaShoppingBag, FaCog, FaBarcode } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 import { useAuth } from "../../context/AuthContext";
@@ -7,9 +7,14 @@ import { useAuth } from "../../context/AuthContext";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
-  const { isAdmin } = useAuth();
+  const [popupOpen, setPopupOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  const { isAdmin, name } = useAuth();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
+  const togglePopup = () => setPopupOpen(!popupOpen);
 
   interface Route {
     path: string;
@@ -24,14 +29,17 @@ const Sidebar = () => {
     { path: "/enterprise", name: "Empresas", icon: <FaUsers size={24} /> },
     { path: "/buys", name: "Compras", icon: <FaShoppingBag size={24} /> },
     { path: "/nf", name: "Nota Fiscal", icon: <FaBarcode size={24} />, adminOnly: true },
-    { path: "/reports", name: "Relatorios", icon: <FaClipboard size={24} />, adminOnly: true },
+  ];
+
+  const settings: Route[] = [
+    { path: "/reports", name: "Config", icon: <FaCog size={24} />, adminOnly: true },
   ];
 
   const renderRoute = (route: Route, index: number) => (
     <Link
       key={index}
       to={route.path}
-      className={`flex py-4 cursor-pointer transition-all duration-150 ease-in-out transform
+      className={`flex py-4 cursor-pointer w-full transition-all duration-150 ease-in-out transform
         ${isOpen ? "justify-start p-2" : "justify-center"}`}
     >
       {route.icon}
@@ -44,8 +52,27 @@ const Sidebar = () => {
     navigate("/auth/login");
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sidebarRef.current && !sidebarRef.current.contains(event.target as Node) &&
+        popupRef.current && !popupRef.current.contains(event.target as Node)
+      ) {
+        setPopupOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={`flex flex-col h-screen shadow-xl text-zinc-800 transition-width duration-300 ${isOpen ? "w-60" : "w-20"}`}>
+    <div
+      ref={sidebarRef}
+      className={`flex flex-col h-screen shadow-xl text-zinc-800 transition-width duration-300 ${isOpen ? "w-60" : "w-20"}`}
+    >
       <div className="flex flex-col flex-grow justify-between">
         <div className="p-2">
           <div className="p-4 pb-2 flex justify-between items-center">
@@ -60,13 +87,30 @@ const Sidebar = () => {
         </div>
       </div>
       <div>
-        <div className="flex justify-center items-center p-4">
-          <button onClick={handleLogout} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
-            <FaSignOutAlt size={24} />
-            {isOpen && <span className="pl-4">Sair</span>}
+        <div className="flex flex-col items-center p-4">
+          {settings.map(renderRoute)}
+          <button onClick={togglePopup} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
+            <FaUserAlt size={24} />
+            {isOpen && <span className="pl-4">Conta</span>}
           </button>
         </div>
       </div>
+
+      {popupOpen && (
+        <div
+          ref={popupRef}
+          className="absolute bottom-14 left-0 bg-white shadow-lg rounded-md p-4 z-50 w-48"
+        >
+          <p className="text-gray-700 font-medium">{isAdmin ? `${name} ADMIN` : name}</p>
+          <button
+            onClick={handleLogout}
+            className="mt-4 w-full text-left text-red-500 hover:text-red-700"
+          >
+            <FaSignOutAlt size={20} className="inline mr-2" />
+            Sair
+          </button>
+        </div>
+      )}
     </div>
   );
 };

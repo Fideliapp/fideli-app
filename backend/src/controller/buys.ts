@@ -14,7 +14,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
     }
 
     await prisma.$transaction(async (client) => {
-      const nota = await client.notaFiscal.findUniqueOrThrow({
+      const nota = await client.notaFiscal.findUnique({
         select: {
           id: true,
           valor: true,
@@ -23,16 +23,13 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         where: {
           nf,
         },
-      })
+      });
 
       if (!nota) {
-        res.status(404).json({ message: "Nota fiscal não encontrada." });
-        return;
+        throw new Error("NOTA_NOT_FOUND");
       }
 
-
       const valor = nota.valor;
-
       const pontosAcumulados = Math.floor(valor / 10);
 
       const compra = await client.compras.create({
@@ -54,7 +51,6 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         },
       });
 
-
       let acumulado = await client.pontos.findUnique({
         where: {
           clienteId_empresaId: {
@@ -70,7 +66,9 @@ export const create = async (req: Request, res: Response): Promise<void> => {
 
       if (!acumulado) acumulado = { valorAcumulado: 0, pontos: 0 };
 
-      const points = Math.floor((acumulado?.valorAcumulado + valor) / 10) - Math.floor(acumulado?.valorAcumulado / 10)
+      const points =
+        Math.floor((acumulado?.valorAcumulado + valor) / 10) -
+        Math.floor(acumulado?.valorAcumulado / 10);
 
       await client.pontos.upsert({
         where: {
@@ -84,7 +82,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
             increment: valor,
           },
           pontos: {
-            increment: points
+            increment: points,
           },
         },
         create: {
@@ -95,13 +93,23 @@ export const create = async (req: Request, res: Response): Promise<void> => {
         },
       });
 
-      await createTransaction(clienteId, valor, cartaoId, nota.empresaId, client);
+      await createTransaction(
+        clienteId,
+        valor,
+        cartaoId,
+        nota.empresaId,
+        client
+      );
     });
 
     res.status(201).json({ message: "Compra cadastrada com sucesso!" });
   } catch (error) {
-    console.error("Error buys.ts: ", error);
-    res.status(500).json({ message: "Erro ao cadastrar a compra.", error });
+    if (error instanceof Error && error.message === "NOTA_NOT_FOUND") {
+      res.status(404).json({ message: "Nota fiscal não encontrada." });
+    } else {
+      console.error("Error buys.ts: ", error);
+      res.status(500).json({ message: "Erro ao cadastrar a compra.", error });
+    }
   }
 };
 
@@ -144,34 +152,38 @@ const createTransaction = async (clienteId: number, valor: number, cartaoId: num
 }
 
 export const getPointsEnterpriseChart = async (req: Request, res: Response): Promise<void> => {
-  const { clienteId } = req.params
+  const { clienteId } = req.params;
+
   try {
     const pontos = await prisma.pontos.findMany({
       select: {
         pontos: true,
         empresa: {
-          select: { nome: true, id: true }
-        }
+          select: { nome: true, id: true },
+        },
       },
-      where: { clienteId: Number(clienteId) }
-    })
+      where: { clienteId: Number(clienteId) },
+    });
 
-    if (!pontos) return
+    if (!pontos || pontos.length === 0) {
+      res.status(404).json({ message: "Nenhum ponto encontrado para este cliente." });
+      return;
+    }
 
     const formattedResponse = pontos.map(({ empresa, pontos }) => ({
       ...empresa,
-      pontos
-    }))
+      pontos,
+    }));
 
-    res.status(200).json(formattedResponse)
-
+    res.status(200).json(formattedResponse);
   } catch (error) {
-    res.status(400).send({
+    console.error("Error fetching enterprise chart:", error);
+    res.status(500).send({
       message: "Ops, Algo deu errado",
-      error
-    })
+      error,
+    });
   }
-}
+};
 
 export const getUserPointsHistory = async (req: Request, res: Response): Promise<void> => {
   const { clienteId } = req.params;
@@ -184,26 +196,31 @@ export const getUserPointsHistory = async (req: Request, res: Response): Promise
       GROUP BY DATE(data)
     `;
 
-    const totalGasto = (totalGastoRaw as { data: Date, total: number }[]).map((item: { data: Date, total: number }) => ({
-      data: item.data,
-      _sum: { valor: item.total }
-    }));
+    const totalGasto = (totalGastoRaw as { data: Date; total: number }[]).map(
+      (item: { data: Date; total: number }) => ({
+        data: item.data,
+        _sum: { valor: item.total },
+      })
+    );
 
     if (!totalGasto || totalGasto.length === 0) {
-      res.status(404).json({ message: "Nenhum histórico encontrado para este cliente." });
+      res.status(404).json({
+        message: "Nenhum histórico encontrado para este cliente.",
+      });
+      return;
     }
 
-    const result = totalGasto.map(item => ({
+    const result = totalGasto.map((item) => ({
       data: item.data,
       total: item._sum.valor,
     }));
 
     res.status(200).json(result);
-
   } catch (error) {
-    res.status(400).json({
+    console.error("Error fetching points history:", error);
+    res.status(500).json({
       message: "Ops, algo deu errado.",
-      error
+      error,
     });
   }
 };

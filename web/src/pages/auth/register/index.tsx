@@ -9,6 +9,7 @@ const Register = () => {
 
   const onSubmit = async (data: any) => {
     try {
+      console.log(data);
       const res = await api.post("/auth/register", { ...data });
 
       if (res.status >= 200 && res.status < 300) {
@@ -37,6 +38,20 @@ const Register = () => {
 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="col-span-1 sm:col-span-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Nome
+              </label>
+              <input
+                type="name"
+                id="name"
+                {...register('nome', { required: true })}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.name ? 'border-red-500' : ''}`}
+                placeholder="Nome"
+              />
+              {errors.email && <span className="text-red-500">Este campo é obrigatório</span>}
+            </div>
+
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email

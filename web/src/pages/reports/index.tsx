@@ -32,9 +32,9 @@ function Reports() {
 
   const columns: Array<{ key: keyof User | 'actions'; label: string; render?: (row: User) => JSX.Element }> = [
     { key: 'id', label: 'ID' },
-    { key: 'admin', label: 'Admin' },
+    { key: 'admin', label: 'Admin', render: (row: User) => <span>{row.admin ? 'Sim' : 'Não'}</span> },
     { key: 'email', label: 'Email' },
-    { key: 'tel', label: 'Telephone' },
+    { key: 'tel', label: 'Telefone' },
     {
       key: 'actions',
       label: 'Ações',
@@ -56,93 +56,14 @@ function Reports() {
   };
 
 
-  const barChartOptions = {
-    chart: {
-      type: 'bar' as const,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: '55%',
-        endingShape: 'rounded',
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    xaxis: {
-      categories: ['a', 'b', 'c'],
-    },
-    yaxis: {
-      title: {
-        text: 'Pontos',
-      },
-    },
-    title: {
-      text: 'Pontos por Empresa',
-      align: 'center',
-    },
-    colors: ['#4338ca'],
-  };
-
-  const barChartSeries = [
-    {
-      name: 'Pontos',
-      data: [1, 2, 3],
-    },
-  ];
-
-  const lineChartOptions = {
-    chart: {
-      type: 'line' as const,
-      height: 350,
-    },
-    title: {
-      text: 'Total Gasto',
-      align: 'center',
-    },
-    xaxis: {
-      categories: ['A', 'B', 'C'],
-    },
-    yaxis: {
-      title: {
-        text: 'Total Gasto (R$)',
-      },
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 2,
-    },
-    markers: {
-      size: 4,
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    colors: ['#4338ca'],
-  };
-
-  const lineChartSeries = [
-    {
-      name: 'Total Gasto',
-      data: [0, 2, 3],
-    },
-  ];
-
   return (
     <div className="bg-gray-100 w-full p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <Chart options={barChartOptions} series={barChartSeries} type="bar" height={350} />
-        </div>
-
-        <div className="bg-white shadow-lg rounded-lg p-6">
-          <Chart options={lineChartOptions} series={lineChartSeries} type="line" height={350} />
-        </div>
-
-        <div className="bg-white shadow-lg rounded-lg p-6 col-span-2">
+        <div className="bg-white shadow-lg rounded-lg p-6 col-span-2 max-h-screen">
           {error ? (
-            <p className="text-red-500">{error}</p>
+            <p className="text-red-500">
+              Houve um erro ao carregar os usuários. Por favor, tente novamente mais tarde.
+            </p>
           ) : (
             <Table columns={columns} data={users} />
           )}
