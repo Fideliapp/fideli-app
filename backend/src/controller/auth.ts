@@ -66,6 +66,7 @@ export const getUsers = async (req: Request, res: Response): Promise<any> => {
       admin: true,
       email: true,
       tel: true,
+      nome: true,
     }
   })
 
@@ -91,5 +92,3 @@ export const toggleAdmin = async (req: Request, res: Response): Promise<any> => 
     res.status(500).json({ message: "Internal Server Error", error });
   }
 };
-
-

@@ -19,6 +19,7 @@ export const create = async (req: Request, res: Response): Promise<void> => {
           id: true,
           valor: true,
           empresaId: true,
+          clienteId: true
         },
         where: {
           nf,
@@ -28,6 +29,14 @@ export const create = async (req: Request, res: Response): Promise<void> => {
       if (!nota) {
         throw new Error("NOTA_NOT_FOUND");
       }
+
+      console.log({
+        clienteId,
+        notaCID: nota.clienteId,
+        result: nota.clienteId == clienteId
+      })
+
+      if (nota.clienteId !== clienteId) throw new Error("NOTA_CANNOT_BE_USED");
 
       const valor = nota.valor;
       const pontosAcumulados = Math.floor(valor / 10);
@@ -106,7 +115,11 @@ export const create = async (req: Request, res: Response): Promise<void> => {
   } catch (error) {
     if (error instanceof Error && error.message === "NOTA_NOT_FOUND") {
       res.status(404).json({ message: "Nota fiscal não encontrada." });
-    } else {
+    }
+    if (error instanceof Error && error.message === "NOTA_CANNOT_BE_USED") {
+      res.status(400).json({ message: "Está nota não pode ser usada por você" })
+    }
+    else {
       console.error("Error buys.ts: ", error);
       res.status(500).json({ message: "Erro ao cadastrar a compra.", error });
     }

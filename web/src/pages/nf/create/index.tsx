@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
 import SelectEnterprise from '../components/EnterpriseInput';
+import SelectCliente from '../components/ClienteInput';
 
 const CreateNf = () => {
   const { register, handleSubmit, formState: { errors }, control } = useForm();
@@ -67,6 +68,17 @@ const CreateNf = () => {
 
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
+                Selecione um cliente
+              </label>
+              <SelectCliente
+                name="clienteId"
+                control={control}
+                error={errors.clienteId ? 'Este campo é obrigatório' : undefined}
+              />
+            </div>
+
+            <div className="col-span-1 sm:col-span-2">
+              <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
                 Selecione a empresa
               </label>
               <SelectEnterprise
@@ -75,6 +87,7 @@ const CreateNf = () => {
                 error={errors.empresaId ? 'Este campo é obrigatório' : undefined}
               />
             </div>
+
           </div>
 
           <div>
