@@ -60,7 +60,7 @@ const Login = () => {
                 type="email"
                 id="cpf"
                 {...register('email', { required: true })}
-                className="block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm"
                 placeholder="email"
               />
               {errors.email && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -73,7 +73,7 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 {...register('pass', { required: true })}
-                className="w-full px-3 py-2 mt-1 text-gray-900 border-none rounded-md outline-none appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="w-full px-3 py-2 mt-1 text-gray-900 border-none rounded-md outline-none appearance-none focus:ring-purple focus:border-purple sm:text-sm"
                 placeholder="••••••••"
               />
               <button
@@ -89,13 +89,13 @@ const Login = () => {
           <div>
             <input
               type="submit"
-              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
             />
           </div>
 
           <div className="text-center">
             <span className="text-sm text-gray-600">Não tem uma conta? </span>
-            <Link to="/auth/register" className="text-indigo-600 hover:underline">
+            <Link to="/auth/register" className="text-purple hover:underline">
               Crie sua conta
             </Link>
           </div>

@@ -46,7 +46,7 @@ const Register = () => {
                 type="name"
                 id="name"
                 {...register('nome', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.name ? 'border-red-500' : ''}`}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.name ? 'border-red-500' : ''}`}
                 placeholder="Nome"
               />
               {errors.email && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -60,7 +60,7 @@ const Register = () => {
                 type="email"
                 id="email"
                 {...register('email', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.email ? 'border-red-500' : ''}`}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="email@email.com"
               />
               {errors.email && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -74,7 +74,7 @@ const Register = () => {
                 type="password"
                 id="password"
                 {...register('pass', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.password ? 'border-red-500' : ''}`}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="••••••••"
               />
               {errors.password && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -88,7 +88,7 @@ const Register = () => {
                 type="text"
                 id="cpf"
                 {...register('cpf', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.cpf ? 'border-red-500' : ''}`}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.cpf ? 'border-red-500' : ''}`}
                 placeholder="000.000.000-00"
               />
               {errors.cpf && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -102,7 +102,7 @@ const Register = () => {
                 type="text"
                 id="tel"
                 {...register('tel', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.tel ? 'border-red-500' : ''}`}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.tel ? 'border-red-500' : ''}`}
                 placeholder="(41) 0000-0000"
               />
               {errors.tel && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -112,7 +112,7 @@ const Register = () => {
           <div>
             <input
               type="submit"
-              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
             />
           </div>
         </form>

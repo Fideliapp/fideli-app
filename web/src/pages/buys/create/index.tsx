@@ -56,7 +56,7 @@ const CreateBuy = () => {
                 type="text"
                 id="nf"
                 {...register('nf', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
+                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
                 placeholder="Nota fiscal"
               />
               {errors.nome && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -77,7 +77,7 @@ const CreateBuy = () => {
           <div>
             <input
               type="submit"
-              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
             />
           </div>
         </form>

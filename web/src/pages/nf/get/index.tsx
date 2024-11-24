@@ -41,7 +41,7 @@ const GetNf = () => {
   return (
     <div className="bg-gray-100 min-h-screen w-full p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">Notas Fiscais</h1>
+        <h1 className="text-2xl font-bold text-purple mb-4">Notas Fiscais</h1>
         <div className="flex items-center gap-2">
           <Controller
             name="empresa"
@@ -55,7 +55,7 @@ const GetNf = () => {
             )}
           />
           <button
-            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-md hover:bg-indigo-700 focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
             onClick={() => navigate("/nf/create")}
           >
             Cadastrar NF
