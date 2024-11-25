@@ -17,6 +17,8 @@ import CreateBuy from './pages/buys/create';
 import Reports from './pages/reports';
 import GetNf from './pages/nf/get';
 import CreateNf from './pages/nf/create';
+import GetPromotion from './pages/promotions/get';
+import CreatePromotion from './pages/promotions/create';
 
 const isTokenExpired = (token: string): boolean => {
   const { exp } = jwtDecode<{ exp: number }>(token);
@@ -100,6 +102,22 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <GetCards />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/promotions',
+    element: (
+      <ProtectedRoute>
+        <GetPromotion />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/promotions/create',
+    element: (
+      <ProtectedRoute>
+        <CreatePromotion />
       </ProtectedRoute>
     ),
   },

@@ -2,14 +2,13 @@ import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
 import SelectEnterprise from '../components/EnterpriseInput';
-import SelectCliente from '../components/ClienteInput';
 
-const CreateNf = () => {
+const CreatePromotion = () => {
   const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   const onSubmit = async (data: any) => {
     try {
-      const res = await api.post("/nf", {
+      const res = await api.post("/promotions", {
         ...data,
       });
 
@@ -34,60 +33,75 @@ const CreateNf = () => {
   return (
     <div className="flex items-center justify-center h-screen w-full bg-gray-100">
       <div className="w-full max-w-lg p-8 space-y-6 bg-white rounded-lg shadow-md sm:max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-900">Cadastrar Nota Fiscal</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-900">Criar promoção</h2>
 
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
-                NF
+                Nome
               </label>
               <input
                 type="text"
                 id="nome"
-                {...register('nf', { required: true })}
+                {...register('nome', { required: true })}
                 className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
-                placeholder="Digite o codigo da NF"
+                placeholder="Digite o nome"
               />
               {errors.nome && <span className="text-red-500">Este campo é obrigatório</span>}
             </div>
 
             <div className="col-span-1 sm:col-span-2">
               <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
-                Valor
+                Descrição
               </label>
               <input
-                type="number"
-                id="valor"
-                {...register('valor', { required: true })}
+                type="text"
+                id="text"
+                {...register('descricao', { required: true })}
                 className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.numero ? 'border-red-500' : ''}`}
-                placeholder="Digite o valor"
+                placeholder="Digite a descrição"
               />
               {errors.numero && <span className="text-red-500">Este campo é obrigatório</span>}
             </div>
+          </div>
 
-            <div className="col-span-1 sm:col-span-2">
-              <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
-                Selecione um cliente
-              </label>
-              <SelectCliente
-                name="clienteId"
-                control={control}
-                error={errors.clienteId ? 'Este campo é obrigatório' : undefined}
-              />
-            </div>
+          <div className="col-span-1 sm:col-span-2">
+            <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
+              Valor
+            </label>
+            <input
+              type="number"
+              id="valor"
+              {...register('valor', { required: true })}
+              className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
+              placeholder="Digite o nome"
+            />
+            {errors.nome && <span className="text-red-500">Este campo é obrigatório</span>}
+          </div>
 
-            <div className="col-span-1 sm:col-span-2">
-              <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
-                Selecione a empresa
-              </label>
-              <SelectEnterprise
-                name="empresaId"
-                control={control}
-                error={errors.empresaId ? 'Este campo é obrigatório' : undefined}
-              />
-            </div>
+          <div className="col-span-1 sm:col-span-2">
+            <label htmlFor="nome" className="block text-sm font-medium text-gray-700">
+              Data de expiração
+            </label>
+            <input
+              type="date"
+              id="valor"
+              {...register('data', { required: true })}
+              className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
+            />
+            {errors.nome && <span className="text-red-500">Este campo é obrigatório</span>}
+          </div>
 
+          <div className="col-span-1 sm:col-span-2">
+            <label htmlFor="numero" className="block text-sm font-medium text-gray-700">
+              Selecione a empresa
+            </label>
+            <SelectEnterprise
+              name="empresaId"
+              control={control}
+              error={errors.empresaId ? 'Este campo é obrigatório' : undefined}
+            />
           </div>
 
           <div>
@@ -102,4 +116,4 @@ const CreateNf = () => {
   );
 };
 
-export default CreateNf;
+export default CreatePromotion;

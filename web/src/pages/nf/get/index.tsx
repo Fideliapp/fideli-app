@@ -55,7 +55,7 @@ const GetNf = () => {
             )}
           />
           <button
-            className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-md hover:bg-indigo-700 focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
+            className="w-full px-4 py-2 text-white bg-purple rounded-md shadow-md hover:bg-purple focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
             onClick={() => navigate("/nf/create")}
           >
             Cadastrar NF
@@ -68,7 +68,7 @@ const GetNf = () => {
             key={id}
             className="col-span-1 w-full p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
           >
-            <h2 className="text-xl font-bold text-indigo-700 mb-2">{nf}</h2>
+            <h2 className="text-xl font-bold text-purple mb-2">{nf}</h2>
             <div className="flex items-center text-gray-500">
               <span className="text-sm">{
                 Intl.NumberFormat("pt-BR", {

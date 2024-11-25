@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaUserAlt, FaShoppingBag, FaCog, FaBarcode } from "react-icons/fa";
+import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaUserAlt, FaShoppingBag, FaPercentage, FaCog, FaBarcode } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 import { useAuth } from "../../context/AuthContext";
@@ -28,6 +28,7 @@ const Sidebar = () => {
     { path: "/card", name: "Cartão", icon: <FaCreditCard color="#552D7F" size={24} /> },
     { path: "/enterprise", name: "Empresas", icon: <FaUsers color="#552D7F" size={24} /> },
     { path: "/buys", name: "Compras", icon: <FaShoppingBag color="#552D7F" size={24} /> },
+    { path: "/promotions", name: "Promoções", icon: <FaPercentage color="#552D7F" size={24} /> },
     { path: "/nf", name: "Nota Fiscal", icon: <FaBarcode color="#552D7F" size={24} />, adminOnly: true },
   ];
 
