@@ -26,7 +26,7 @@ const Sidebar = () => {
   const routes: Route[] = [
     { path: "/", name: "Graficos", icon: <FaChartBar color="#552D7F" size={24} /> },
     { path: "/card", name: "Cartão", icon: <FaCreditCard color="#552D7F" size={24} /> },
-    { path: "/enterprise", name: "Empresas", icon: <FaUsers color="#552D7F" size={24} /> },
+    { path: "/enterprise", name: "Empresas", icon: <FaUsers color="#552D7F" size={24} />, adminOnly: true },
     { path: "/buys", name: "Compras", icon: <FaShoppingBag color="#552D7F" size={24} /> },
     { path: "/promotions", name: "Promoções", icon: <FaPercentage color="#552D7F" size={24} /> },
     { path: "/nf", name: "Nota Fiscal", icon: <FaBarcode color="#552D7F" size={24} />, adminOnly: true },
