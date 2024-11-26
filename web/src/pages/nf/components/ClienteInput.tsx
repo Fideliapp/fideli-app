@@ -2,23 +2,25 @@ import React, { useEffect } from 'react';
 import { useController } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../../context/AuthContext';
 
-interface Card {
+interface User {
   id: number;
+  admin: boolean;
+  email: string;
+  tel: string;
   nome: string;
 }
 
-interface SelectEnterpriseProps {
+interface SelectClienteProps {
   name: string;
   control: any;
   error?: string;
 }
 
-const SelectCard = (props: SelectEnterpriseProps) => {
+const SelectCliente = (props: SelectClienteProps) => {
   const { name, control, error } = props;
 
-  const [cards, setCards] = React.useState<Card[]>([]);
+  const [users, setUsers] = React.useState<User[]>([]);
 
   const { field } = useController({
     name,
@@ -26,15 +28,20 @@ const SelectCard = (props: SelectEnterpriseProps) => {
     defaultValue: '',
   });
 
-  const { userId } = useAuth();
-
   useEffect(() => {
-    if (userId == null) return
+    const fetchEnterprises = async () => {
+      try {
+        const response = await api.get('/auth/users');
+        setUsers(response.data);
+      } catch (error: any) {
+        toast.error(
+          error.response?.data.message || 'Erro ao carregar clientes. Tente novamente.'
+        );
+      }
+    };
 
-    api.get(`/card/user/${userId}`).then((response) => {
-      setCards(response.data);
-    });
-  }, [userId]);
+    fetchEnterprises();
+  }, []);
 
   return (
     <>
@@ -46,10 +53,10 @@ const SelectCard = (props: SelectEnterpriseProps) => {
         }}
         className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-purple focus:border-purple sm:text-sm`}
       >
-        <option value="">Selecione um cartão</option>
-        {cards.map((card) => (
-          <option key={card.id} value={card.id}>
-            {card.nome}
+        <option value="">Selecione uma cliente</option>
+        {users.map((users) => (
+          <option key={users.id} value={users.id}>
+            {users.nome}
           </option>
         ))}
       </select>
@@ -58,4 +65,4 @@ const SelectCard = (props: SelectEnterpriseProps) => {
   );
 };
 
-export default SelectCard;
+export default SelectCliente;

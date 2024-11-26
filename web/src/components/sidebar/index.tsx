@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaUserAlt, FaShoppingBag, FaCog, FaBarcode } from "react-icons/fa";
+import { FaChartBar, FaCreditCard, FaUsers, FaArrowLeft, FaArrowRight, FaSignOutAlt, FaUserAlt, FaShoppingBag, FaPercentage, FaCog, FaBarcode } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../../assets/logo.png';
 import { useAuth } from "../../context/AuthContext";
@@ -24,15 +24,16 @@ const Sidebar = () => {
   }
 
   const routes: Route[] = [
-    { path: "/", name: "Graficos", icon: <FaChartBar size={24} /> },
-    { path: "/card", name: "Cartão", icon: <FaCreditCard size={24} /> },
-    { path: "/enterprise", name: "Empresas", icon: <FaUsers size={24} /> },
-    { path: "/buys", name: "Compras", icon: <FaShoppingBag size={24} /> },
-    { path: "/nf", name: "Nota Fiscal", icon: <FaBarcode size={24} />, adminOnly: true },
+    { path: "/", name: "Graficos", icon: <FaChartBar color="#552D7F" size={24} /> },
+    { path: "/card", name: "Cartão", icon: <FaCreditCard color="#552D7F" size={24} /> },
+    { path: "/enterprise", name: "Empresas", icon: <FaUsers color="#552D7F" size={24} />, adminOnly: true },
+    { path: "/buys", name: "Compras", icon: <FaShoppingBag color="#552D7F" size={24} /> },
+    { path: "/promotions", name: "Promoções", icon: <FaPercentage color="#552D7F" size={24} /> },
+    { path: "/nf", name: "Nota Fiscal", icon: <FaBarcode color="#552D7F" size={24} />, adminOnly: true },
   ];
 
   const settings: Route[] = [
-    { path: "/reports", name: "Config", icon: <FaCog size={24} />, adminOnly: true },
+    { path: "/reports", name: "Config", icon: <FaCog color="#552D7F" size={24} />, adminOnly: true },
   ];
 
   const renderRoute = (route: Route, index: number) => (
@@ -78,7 +79,7 @@ const Sidebar = () => {
           <div className="p-4 pb-2 flex justify-between items-center">
             <img src={logo} className={`overflow-hidden transition-all ${isOpen ? "w-32 mr-2" : "w-0"}`} />
             <button onClick={toggleSidebar} className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
-              {isOpen ? <FaArrowLeft size={24} /> : <FaArrowRight size={24} />}
+              {isOpen ? <FaArrowLeft color="#552D7F" size={24} /> : <FaArrowRight color="#552D7F" size={24} />}
             </button>
           </div>
           {routes
@@ -88,9 +89,10 @@ const Sidebar = () => {
       </div>
       <div>
         <div className="flex flex-col items-center p-4">
-          {settings.map(renderRoute)}
-          <button onClick={togglePopup} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
-            <FaUserAlt size={24} />
+          {settings
+            .filter(route => !route.adminOnly || isAdmin)
+            .map(renderRoute)}          <button onClick={togglePopup} className="flex flex-row items-center w-full p-2 rounded-lg bg-gray-50 hover:bg-gray-100">
+            <FaUserAlt color="#552D7F" size={24} />
             {isOpen && <span className="pl-4">Conta</span>}
           </button>
         </div>
@@ -101,7 +103,7 @@ const Sidebar = () => {
           ref={popupRef}
           className="absolute bottom-14 left-0 bg-white shadow-lg rounded-md p-4 z-50 w-48"
         >
-          <p className="text-gray-700 font-medium">{isAdmin ? `${name} ADMIN` : name}</p>
+          <p className="text-gray-700 font-medium">{isAdmin ? `${name} [ADM]` : name}</p>
           <button
             onClick={handleLogout}
             className="mt-4 w-full text-left text-red-500 hover:text-red-700"

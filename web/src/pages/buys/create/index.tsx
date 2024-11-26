@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import api from '../../../services/api';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../../context/AuthContext';
-import SelectEnterprise from '../components/EnterpriseInput';
 import SelectCard from '../components/CardInput';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,7 +55,10 @@ const CreateBuy = () => {
                 type="text"
                 id="nf"
                 {...register('nf', { required: true })}
-                className={`block w-full px-3 py-2 mt-1 text-gray-900 placeholder-gray-500 border rounded-md shadow-sm appearance-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${errors.nome ? 'border-red-500' : ''}`}
+                className={`bg-gray-200 rounded w-full text-gray-700 focus:outline-none border-b-4 ${errors.password
+                  ? "border-red-500 focus:border-red-600"
+                  : "border-gray-300 focus:border-purple-600"
+                  } transition duration-500 px-3 pb-3`}
                 placeholder="Nota fiscal"
               />
               {errors.nome && <span className="text-red-500">Este campo é obrigatório</span>}
@@ -77,7 +79,7 @@ const CreateBuy = () => {
           <div>
             <input
               type="submit"
-              className="w-full px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+              className="w-full px-4 py-2 text-white bg-purple rounded-md shadow-sm hover:bg-purple focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
             />
           </div>
         </form>

@@ -27,6 +27,7 @@ model Client {
   Compras    Compras[]
   Pontos     Pontos[]
   Transacoes Transacoes[]
+  NotaFiscal NotaFiscal[]
 }
 
 model Endereco {
@@ -48,7 +49,9 @@ model NotaFiscal {
   nf        String   @unique
   empresaId Int
   compraId  Int?     @unique
+  clienteId Int      @default(0)
 
+  cliente Client?  @relation(fields: [clienteId], references: [id])
   empresa Empresa  @relation(fields: [empresaId], references: [id])
   compra  Compras? @relation("NotaFiscalToCompras")
 }

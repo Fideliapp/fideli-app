@@ -40,7 +40,7 @@ function Reports() {
       label: 'Ações',
       render: (row: User) => (
         <button
-          className="px-4 py-2 text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          className="px-4 py-2 text-white bg-purple rounded-md shadow-sm hover:bg-purple focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
           onClick={() => handleButtonClick(row.id)}
         >
           Definir como admin

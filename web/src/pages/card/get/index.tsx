@@ -28,9 +28,9 @@ const GetCards = () => {
   return (
     <div className="bg-gray-100 min-h-screen w-full p-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold mb-4">Cartões</h1>
+        <h1 className="text-2xl font-bold text-purple mb-4">Cartões</h1>
         <button
-          className="px-4 py-2 text-white bg-indigo-600 rounded-md shadow-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          className="px-4 py-2 text-white bg-purple rounded-md shadow-md hover:bg-purple focus:ring-2 focus:ring-purple focus:ring-offset-2 focus:ring-offset-gray-100"
           onClick={() => navigate('/card/create')}
         >
           Novo cartão
@@ -42,7 +42,7 @@ const GetCards = () => {
             key={id}
             className="col-span-1 w-full p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
           >
-            <h2 className="text-xl font-bold text-indigo-700 mb-2">{nome}</h2>
+            <h2 className="text-xl font-bold text-purple mb-2">{nome}</h2>
             <div className="flex items-center text-gray-500">
               <FaBuilding className="mr-2" />
               <span className="text-sm">{empresa.nome}</span>

@@ -3,7 +3,7 @@ import prisma from '../architecture/prisma';
 
 export const create = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { nf, valor, empresaId, } = req.body;
+    const { nf, valor, empresaId, clienteId } = req.body;
 
     const newNf = await prisma.notaFiscal.create({
       data: {
@@ -11,6 +11,7 @@ export const create = async (req: Request, res: Response): Promise<any> => {
         nf,
         valor: parseFloat(valor),
         empresaId: parseInt(empresaId),
+        clienteId: parseInt(clienteId),
       }
     })
 
